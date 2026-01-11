@@ -1,7 +1,7 @@
 // server/src/app.js
 import express from 'express';
 import cors from 'cors';
-import pool from './db.js';
+import prisma from './db.js';
 
 const app = express();
 
@@ -9,8 +9,12 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/health', async (req, res) => {
-  const result = await pool.query('SELECT 1');
-  res.json({ status: 'ok', db: result.rows[0] });
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    res.json({ status: 'ok', db: 'connected' });
+  } catch (error) {
+    res.status(500).json({ status: 'error', db: 'disconnected', error: error.message });
+  }
 });
 
 export default app;
