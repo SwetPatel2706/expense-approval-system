@@ -1,10 +1,7 @@
 // server/src/app.js
-console.log('🟢 [app.js] Loading app.js module...');
 import express from 'express';
 import cors from 'cors';
-console.log('🟢 [app.js] Importing prisma from db.js...');
 import prisma from './db.js';
-console.log('🟢 [app.js] Prisma imported:', !!prisma);
 
 const app = express();
 
@@ -12,21 +9,11 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/health', async (req, res) => {
-  console.log('🟡 [app.js] /health endpoint called');
-  console.log('🟡 [app.js] Prisma instance:', !!prisma);
-  console.log('🟡 [app.js] Prisma type:', typeof prisma);
-  
   try {
-    console.log('🟡 [app.js] Executing prisma.$queryRaw...');
     await prisma.$queryRaw`SELECT 1`;
-    console.log('✅ [app.js] Query successful!');
     res.json({ status: 'ok', db: 'connected' });
   } catch (error) {
-    console.error('❌ [app.js] Health check error occurred');
-    console.error('❌ [app.js] Error name:', error.name);
-    console.error('❌ [app.js] Error message:', error.message);
-    console.error('❌ [app.js] Error stack:', error.stack);
-    console.error('❌ [app.js] Full error object:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+    console.error('Health check error:', error);
     
     // Provide more helpful error messages
     let errorMessage = error.message;
@@ -47,5 +34,4 @@ app.get('/health', async (req, res) => {
   }
 });
 
-console.log('✅ [app.js] app.js module loaded successfully');
 export default app;
