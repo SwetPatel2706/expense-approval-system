@@ -1,3 +1,5 @@
+//server\prisma\schema.prisma
+
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
@@ -10,38 +12,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  employee
-  manager
-  admin
-}
-
-enum ExpenseStatus {
-  pending
-  approved
-  rejected
-}
-
 model User {
-  id        Int       @id @default(autoincrement())
-  name      String    @db.VarChar(100)
-  email     String    @unique @db.VarChar(255)
+  id        String   @id @default(uuid())
+  email     String   @unique
   role      Role
-  createdAt DateTime  @default(now()) @map("created_at")
   expenses  Expense[]
-
-  @@map("users")
+  createdAt DateTime @default(now())
 }
 
 model Expense {
-  id        Int           @id @default(autoincrement())
-  userId    Int           @map("user_id")
-  amount    Decimal       @db.Decimal(12, 2)
-  currency  String        @db.VarChar(10)
-  category  String        @db.VarChar(50)
-  status    ExpenseStatus @default(pending)
-  createdAt DateTime      @default(now()) @map("created_at")
-  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("expenses")
+  id        String        @id @default(uuid())
+  amount    Decimal
+  currency  String
+  category  String
+  status    ExpenseStatus @default(PENDING)
+  userId    String
+  user      User          @relation(fields: [userId], references: [id])
+  createdAt DateTime      @default(now())
 }
+
+enum Role {
+  EMPLOYEE
+  MANAGER
+  ADMIN
+}
+
+enum ExpenseStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+

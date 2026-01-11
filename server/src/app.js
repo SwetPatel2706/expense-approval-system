@@ -2,6 +2,7 @@
 import express from 'express';
 import cors from 'cors';
 import prisma from './db.js';
+import expenseRoutes from './routes/expenses.js';
 
 const app = express();
 
@@ -33,5 +34,16 @@ app.get('/health', async (req, res) => {
     });
   }
 });
+
+app.use('/expenses', expenseRoutes);
+
+app.use((err, req, res, _next) => {
+  console.error(err);
+
+  res.status(500).json({
+    error: 'Internal Server Error',
+  });
+});
+
 
 export default app;
