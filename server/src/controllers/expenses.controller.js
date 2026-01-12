@@ -38,7 +38,8 @@ export async function createExpense(req, res) {
   
       return res.status(400).json({
         message: 'Invalid request body',
-        errors: parsed.error.errors,
+    //   errors: parsed.error.errors,
+    errors: parsed.error.issues,
       });
     }
   
@@ -66,7 +67,9 @@ export async function updateExpense(req, res) {
   if (!parsed.success) {
     return res.status(400).json({
       message: 'Invalid request body',
-      errors: parsed.error.errors,
+    //   errors: parsed.error.errors,
+    errors: parsed.error.issues,
+
     });
   }
 
