@@ -1,5 +1,9 @@
 // server/src/controllers/expenses.controller.js
 import prisma from '../db.js';
+import {
+  createExpenseSchema,
+  updateExpenseSchema,
+} from '../schemas/expense.schema.js';
 
 // GET /expenses
 export async function getAllExpenses(req, res) {
@@ -24,7 +28,16 @@ export async function getExpenseById(req, res) {
 
 // POST /expenses
 export async function createExpense(req, res) {
-  const { amount, currency, category, userId } = req.body;
+  const parsed = createExpenseSchema.safeParse(req.body);
+
+  if (!parsed.success) {
+    return res.status(400).json({
+      message: 'Invalid request body',
+      errors: parsed.error.errors,
+    });
+  }
+
+  const { amount, currency, category, userId } = parsed.data;
 
   const expense = await prisma.expense.create({
     data: {
@@ -42,16 +55,19 @@ export async function createExpense(req, res) {
 // PUT /expenses/:id
 export async function updateExpense(req, res) {
   const { id } = req.params;
-  const { amount, currency, category, status } = req.body;
+
+  const parsed = updateExpenseSchema.safeParse(req.body);
+
+  if (!parsed.success) {
+    return res.status(400).json({
+      message: 'Invalid request body',
+      errors: parsed.error.errors,
+    });
+  }
 
   const expense = await prisma.expense.update({
     where: { id },
-    data: {
-      amount,
-      currency,
-      category,
-      status,
-    },
+    data: parsed.data,
   });
 
   res.json(expense);
