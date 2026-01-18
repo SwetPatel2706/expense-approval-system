@@ -1,4 +1,4 @@
-// server/src/routes/expenses.js
+// server/src/routes/expenses.ts
 import express from 'express';
 import {
   getAllExpenses,
