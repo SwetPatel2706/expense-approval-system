@@ -1,4 +1,4 @@
-// server/src/db.js
+// server/src/db.ts
 import 'dotenv/config';  // Must be imported FIRST to load environment variables
 import { PrismaClient } from '@prisma/client';
 

@@ -1,4 +1,4 @@
-// server/src/schemas/expense.schema.js
+// server/src/schemas/expense.schema.ts
 import { z } from 'zod';
 
 export const createExpenseSchema = z.object({

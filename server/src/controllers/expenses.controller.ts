@@ -1,4 +1,4 @@
-// server/src/controllers/expenses.controller.js
+// server/src/controllers/expenses.controller.ts
 import prisma from '../db.js';
 import {
   createExpenseSchema,
