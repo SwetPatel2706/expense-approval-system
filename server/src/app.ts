@@ -1,13 +1,14 @@
 // server/src/app.ts
 import express from 'express';
 import cors from 'cors';
+import { httpConfig } from './config/http.config.js';
 import prisma from './db.js';
 import expenseRoutes from './routes/expenses.js';
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
+app.use(cors(httpConfig.cors));
+app.use(express.json({ limit: httpConfig.bodyLimit }));
 
 app.get('/health', async (req, res) => {
   await prisma.$queryRaw`SELECT 1`;
