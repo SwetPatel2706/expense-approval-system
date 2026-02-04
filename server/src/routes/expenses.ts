@@ -1,19 +1,26 @@
 // server/src/routes/expenses.ts
-import express from 'express';
+
+import { Router } from "express";
 import {
-  getAllExpenses,
-  getExpenseById,
   createExpense,
-  updateExpense,
   deleteExpense,
-} from '../controllers/expenses.controller.js';
+  getExpenseById,
+  getExpenses,
+  updateExpense,
+} from "../controllers/expenses.controller.js";
+import { asyncHandler } from "../middlewares/async-handler.js";
+import { validate } from "../middlewares/validate.js";
+import { createExpenseSchema, updateExpenseSchema } from "../schemas/expense.schema.js";
 
-const router = express.Router();
+const router = Router();
 
-router.get('/', getAllExpenses);
-router.get('/:id', getExpenseById);
-router.post('/', createExpense);
-router.put('/:id', updateExpense);
-router.delete('/:id', deleteExpense);
+router.post(
+  "/",
+  validate(createExpenseSchema), 
+  asyncHandler(createExpense));
+router.get("/", asyncHandler(getExpenses));
+router.get("/:id", asyncHandler(getExpenseById));
+router.put("/:id", validate(updateExpenseSchema), asyncHandler(updateExpense));
+router.delete("/:id", asyncHandler(deleteExpense));
 
 export default router;

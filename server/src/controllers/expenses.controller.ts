@@ -1,93 +1,130 @@
 // server/src/controllers/expenses.controller.ts
-import prisma from '../db.js';
-import {
-  createExpenseSchema,
-  updateExpenseSchema,
-} from '../schemas/expense.schema.js';
 
-// GET /expenses
-export async function getAllExpenses(req, res) {
-  const expenses = await prisma.expense.findMany();
-  res.json(expenses);
+import { Request, Response } from "express";
+import prisma from "../db.js";
+import { AppError } from "../errors/app-error.js";
+import { ERROR_CODE } from "../errors/error-codes.js";
+import { HTTP_STATUS } from "../constants/http-status.js";
+
+
+/**
+ * GET all expenses
+*/
+export async function getExpenses(_req: Request, res: Response) {
+  const expenses = await prisma.expense.findMany({
+    orderBy: { createdAt: "desc" },
+  });
+  
+  res.status(HTTP_STATUS.OK).json({
+    data: expenses,
+  });
 }
 
-// GET /expenses/:id
-export async function getExpenseById(req, res) {
+/**
+ * GET expense by id
+*/
+export async function getExpenseById(req: Request, res: Response) {
   const { id } = req.params;
-
+  
   const expense = await prisma.expense.findUnique({
     where: { id },
   });
-
+  
   if (!expense) {
-    return res.status(404).json({ message: 'Expense not found' });
+    throw new AppError(
+      "Expense not found",
+      HTTP_STATUS.NOT_FOUND,
+      ERROR_CODE.RESOURCE_NOT_FOUND
+    );
   }
-
-  res.json(expense);
+  
+  res.status(HTTP_STATUS.OK).json({
+    data: expense,
+  });
 }
 
-// POST /expenses
-export async function createExpense(req, res) {
-    const parsed = createExpenseSchema.safeParse(req.body);
-  
-    if (!parsed.success) {
-    //   console.log('❌ Zod validation failed');
-    //   console.log('Request body:', req.body);
-    //   console.log('Zod errors:', parsed.error.errors);
-    //--------------------------------
-  
-      return res.status(400).json({
-        message: 'Invalid request body',
-    //   errors: parsed.error.errors,
-    errors: parsed.error.issues,
-      });
-    }
-  
-    const { amount, currency, category, userId } = parsed.data;
-  
-    const expense = await prisma.expense.create({
-      data: {
-        amount,
-        currency,
-        category,
-        userId,
-        status: 'PENDING',
-      },
-    });
-  
-    res.status(201).json(expense);
-  }  
+/**
+ * CREATE expense
+ */
+export async function createExpense(req: Request, res: Response) {
+  const { amount, currency, category, userId } = req.body;
 
-// PUT /expenses/:id
-export async function updateExpense(req, res) {
-  const { id } = req.params;
-
-  const parsed = updateExpenseSchema.safeParse(req.body);
-
-  if (!parsed.success) {
-    return res.status(400).json({
-      message: 'Invalid request body',
-    //   errors: parsed.error.errors,
-    errors: parsed.error.issues,
-
-    });
-  }
-
-  const expense = await prisma.expense.update({
-    where: { id },
-    data: parsed.data,
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
   });
 
-  res.json(expense);
+  if (!user) {
+    throw new AppError(
+      "User not found",
+      HTTP_STATUS.NOT_FOUND,
+      ERROR_CODE.RESOURCE_NOT_FOUND
+    );
+  }
+
+  const expense = await prisma.expense.create({
+    data: {
+      amount,
+      currency,
+      category,
+      userId,
+    },
+  });
+
+  res.status(HTTP_STATUS.CREATED).json({
+    data: expense,
+  });
+}
+/**
+ * UPDATE expense
+ */
+export async function updateExpense(req: Request, res: Response) {
+  const { id } = req.params;
+
+  const existingExpense = await prisma.expense.findUnique({
+    where: { id },
+  });
+
+  if (!existingExpense) {
+    throw new AppError(
+      "Expense not found",
+      HTTP_STATUS.NOT_FOUND,
+      ERROR_CODE.RESOURCE_NOT_FOUND
+    );
+  }
+
+  const updatedExpense = await prisma.expense.update({
+    where: { id },
+    data: req.body,
+  });
+
+  res.status(HTTP_STATUS.OK).json({
+    data: updatedExpense,
+  });
 }
 
-// DELETE /expenses/:id
-export async function deleteExpense(req, res) {
+/**
+ * DELETE expense
+ */
+export async function deleteExpense(req: Request, res: Response) {
   const { id } = req.params;
+
+  const existingExpense = await prisma.expense.findUnique({
+    where: { id },
+  });
+
+  if (!existingExpense) {
+    throw new AppError(
+      "Expense not found",
+      HTTP_STATUS.NOT_FOUND,
+      ERROR_CODE.RESOURCE_NOT_FOUND
+    );
+  }
 
   await prisma.expense.delete({
     where: { id },
   });
 
-  res.status(204).send();
+  res.status(HTTP_STATUS.OK).json({
+    data: { id },
+  });
 }
