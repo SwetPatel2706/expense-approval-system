@@ -3,7 +3,6 @@
 import { env } from './config/env.config.js';
 // import 'dotenv/config';
 import app from './app.js';
-import { errorHandler } from "./middlewares/error-handler.js";
 
 const PORT = process.env.PORT || 5000;
 
@@ -14,8 +13,6 @@ if (!process.env.DATABASE_URL) {
   console.error('DATABASE_URL=postgresql://username:password@localhost:5432/expense_db');
   process.exit(1);
 }
-
-app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);

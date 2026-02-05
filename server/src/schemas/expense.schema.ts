@@ -5,7 +5,6 @@ export const createExpenseSchema = z.object({
   amount: z.number().positive(),
   currency: z.string().min(1),
   category: z.string().min(1),
-  userId: z.string().min(1),
 });
 
 export const updateExpenseSchema = z.object({

@@ -5,6 +5,7 @@ import { httpConfig } from './config/http.config.js';
 import prisma from './db.js';
 import expenseRoutes from './routes/expenses.js';
 import { errorHandler } from './middlewares/error-handler.js';
+import { authMiddleware } from './middlewares/auth.middleware.js';
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.get('/health', async (req, res) => {
   res.json({ status: 'ok' });
 });
 
+app.use(authMiddleware);
 app.use('/expenses', expenseRoutes);
 
 app.use(errorHandler);

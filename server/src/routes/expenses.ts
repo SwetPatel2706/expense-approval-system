@@ -11,16 +11,27 @@ import {
 import { asyncHandler } from "../middlewares/async-handler.js";
 import { validate } from "../middlewares/validate.js";
 import { createExpenseSchema, updateExpenseSchema } from "../schemas/expense.schema.js";
+import { requireAnyRole } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
 router.post(
   "/",
+  requireAnyRole(["MANAGER", "ADMIN"]),
   validate(createExpenseSchema), 
   asyncHandler(createExpense));
 router.get("/", asyncHandler(getExpenses));
 router.get("/:id", asyncHandler(getExpenseById));
-router.put("/:id", validate(updateExpenseSchema), asyncHandler(updateExpense));
-router.delete("/:id", asyncHandler(deleteExpense));
+router.put(
+  "/:id",
+  requireAnyRole(["MANAGER", "ADMIN"]),
+  validate(updateExpenseSchema),
+  asyncHandler(updateExpense)
+);
+router.delete(
+  "/:id",
+  requireAnyRole(["MANAGER", "ADMIN"]),
+  asyncHandler(deleteExpense)
+);
 
 export default router;
