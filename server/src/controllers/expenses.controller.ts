@@ -1,19 +1,17 @@
 // server/src/controllers/expenses.controller.ts
 
 import { Request, Response } from "express";
-import prisma from "../db.js";
 import { AppError } from "../errors/app-error.js";
 import { ERROR_CODE } from "../errors/error-codes.js";
 import { HTTP_STATUS } from "../constants/http-status.js";
+import * as expenseService from "../services/expenses.service.js";
 
 
 /**
  * GET all expenses
 */
-export async function getExpenses(_req: Request, res: Response) {
-  const expenses = await prisma.expense.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+export async function getExpenses(req: Request, res: Response) {
+  const expenses = await expenseService.getExpenses(req.auth);
   
   res.status(HTTP_STATUS.OK).json({
     data: expenses,
@@ -25,10 +23,9 @@ export async function getExpenses(_req: Request, res: Response) {
 */
 export async function getExpenseById(req: Request, res: Response) {
   const { id } = req.params;
+  const expenseId = typeof id === "string" ? id : id[0];
   
-  const expense = await prisma.expense.findUnique({
-    where: { id },
-  });
+  const expense = await expenseService.getExpenseById(expenseId, req.auth);
   
   if (!expense) {
     throw new AppError(
@@ -48,55 +45,48 @@ export async function getExpenseById(req: Request, res: Response) {
  */
 export async function createExpense(req: Request, res: Response) {
   const { amount, currency, category } = req.body;
-  const userId = req.auth.userId;
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-  });
-
-  if (!user) {
-    throw new AppError(
-      "User not found",
-      HTTP_STATUS.NOT_FOUND,
-      ERROR_CODE.RESOURCE_NOT_FOUND
+  try {
+    const expense = await expenseService.createExpense(
+      { amount, currency, category },
+      req.auth
     );
+
+    res.status(HTTP_STATUS.CREATED).json({
+      data: expense,
+    });
+  } catch (error) {
+    if (error instanceof Error && error.message === "User not found") {
+      throw new AppError(
+        "User not found",
+        HTTP_STATUS.NOT_FOUND,
+        ERROR_CODE.RESOURCE_NOT_FOUND
+      );
+    }
+    throw error;
   }
-
-  const expense = await prisma.expense.create({
-    data: {
-      amount,
-      currency,
-      category,
-      userId,
-    },
-  });
-
-  res.status(HTTP_STATUS.CREATED).json({
-    data: expense,
-  });
 }
+
 /**
  * UPDATE expense
  */
 export async function updateExpense(req: Request, res: Response) {
   const { id } = req.params;
+  const expenseId = typeof id === "string" ? id : id[0];
 
-  const existingExpense = await prisma.expense.findUnique({
-    where: { id },
-  });
+  const updatedExpense = await expenseService.updateExpense(
+    expenseId,
+    req.body,
+    req.auth
+  );
 
-  if (!existingExpense) {
+  if (!updatedExpense) {
     throw new AppError(
       "Expense not found",
       HTTP_STATUS.NOT_FOUND,
       ERROR_CODE.RESOURCE_NOT_FOUND
     );
   }
-
-  const updatedExpense = await prisma.expense.update({
-    where: { id },
-    data: req.body,
-  });
 
   res.status(HTTP_STATUS.OK).json({
     data: updatedExpense,
@@ -108,12 +98,11 @@ export async function updateExpense(req: Request, res: Response) {
  */
 export async function deleteExpense(req: Request, res: Response) {
   const { id } = req.params;
+  const expenseId = typeof id === "string" ? id : id[0];
 
-  const existingExpense = await prisma.expense.findUnique({
-    where: { id },
-  });
+  const result = await expenseService.deleteExpense(expenseId, req.auth);
 
-  if (!existingExpense) {
+  if (!result) {
     throw new AppError(
       "Expense not found",
       HTTP_STATUS.NOT_FOUND,
@@ -121,11 +110,7 @@ export async function deleteExpense(req: Request, res: Response) {
     );
   }
 
-  await prisma.expense.delete({
-    where: { id },
-  });
-
   res.status(HTTP_STATUS.OK).json({
-    data: { id },
+    data: result,
   });
 }
