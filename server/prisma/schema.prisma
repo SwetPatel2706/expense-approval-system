@@ -16,6 +16,7 @@ model User {
   id        String   @id @default(uuid())
   email     String   @unique
   role      Role
+  companyId String
   expenses  Expense[]
   createdAt DateTime @default(now())
 }
@@ -27,8 +28,12 @@ model Expense {
   category  String
   status    ExpenseStatus @default(PENDING)
   userId    String
+  companyId String
   user      User          @relation(fields: [userId], references: [id])
   createdAt DateTime      @default(now())
+
+  @@index([companyId, userId])
+  @@index([companyId, id])
 }
 
 enum Role {

@@ -11,23 +11,23 @@ import type { Expense, Prisma } from "@prisma/client";
  * - ADMIN: all expenses in the company
  */
 export async function getExpenses(auth: AuthContext): Promise<Expense[]> {
-  if (auth.companyId !== "company-0001") {
-    return [];
-  }
-
   let whereClause: Prisma.ExpenseWhereInput;
 
   if (auth.role === "EMPLOYEE") {
     whereClause = {
+      companyId: auth.companyId,
       userId: auth.userId,
     };
   } else if (auth.role === "MANAGER") {
     whereClause = {
+      companyId: auth.companyId,
       userId: auth.userId,
     };
   } else if (auth.role === "ADMIN") {
     // ADMIN: intentionally omitting userId filter to access all company expenses
-    whereClause = {};
+    whereClause = {
+      companyId: auth.companyId,
+    };
   } else {
     return [];
   }
@@ -51,26 +51,25 @@ export async function getExpenseById(
   id: string,
   auth: AuthContext
 ): Promise<Expense | null> {
-  if (auth.companyId !== "company-0001") {
-    return null;
-  }
-
   let whereClause: Prisma.ExpenseWhereInput;
 
   if (auth.role === "EMPLOYEE") {
     whereClause = {
       id,
+      companyId: auth.companyId,
       userId: auth.userId,
     };
   } else if (auth.role === "MANAGER") {
     whereClause = {
       id,
+      companyId: auth.companyId,
       userId: auth.userId,
     };
   } else if (auth.role === "ADMIN") {
     // ADMIN: intentionally omitting userId filter to access any expense in company
     whereClause = {
       id,
+      companyId: auth.companyId,
     };
   } else {
     return null;
@@ -92,16 +91,13 @@ export async function createExpense(
   },
   auth: AuthContext
 ): Promise<Expense | null> {
-  if (auth.companyId !== "company-0001") {
-    return null;
-  }
-
   return prisma.expense.create({
     data: {
       amount: data.amount,
       currency: data.currency,
       category: data.category,
       userId: auth.userId,
+      companyId: auth.companyId,
     },
   });
 }
@@ -115,26 +111,25 @@ export async function updateExpense(
   data: Prisma.ExpenseUpdateInput,
   auth: AuthContext
 ): Promise<Expense | null> {
-  if (auth.companyId !== "company-0001") {
-    return null;
-  }
-
   let whereClause: Prisma.ExpenseWhereInput;
 
   if (auth.role === "EMPLOYEE") {
     whereClause = {
       id,
+      companyId: auth.companyId,
       userId: auth.userId,
     };
   } else if (auth.role === "MANAGER") {
     whereClause = {
       id,
+      companyId: auth.companyId,
       userId: auth.userId,
     };
   } else if (auth.role === "ADMIN") {
     // ADMIN: intentionally omitting userId filter to allow updating any expense in company
     whereClause = {
       id,
+      companyId: auth.companyId,
     };
   } else {
     return null;
@@ -150,7 +145,10 @@ export async function updateExpense(
   }
 
   return prisma.expense.findFirst({
-    where: { id },
+    where: {
+      id,
+      companyId: auth.companyId,
+    },
   });
 }
 
@@ -162,26 +160,25 @@ export async function deleteExpense(
   id: string,
   auth: AuthContext
 ): Promise<{ id: string } | null> {
-  if (auth.companyId !== "company-0001") {
-    return null;
-  }
-
   let whereClause: Prisma.ExpenseWhereInput;
 
   if (auth.role === "EMPLOYEE") {
     whereClause = {
       id,
+      companyId: auth.companyId,
       userId: auth.userId,
     };
   } else if (auth.role === "MANAGER") {
     whereClause = {
       id,
+      companyId: auth.companyId,
       userId: auth.userId,
     };
   } else if (auth.role === "ADMIN") {
     // ADMIN: intentionally omitting userId filter to allow deleting any expense in company
     whereClause = {
       id,
+      companyId: auth.companyId,
     };
   } else {
     return null;
