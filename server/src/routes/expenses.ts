@@ -11,7 +11,7 @@ import {
 import { asyncHandler } from "../middlewares/async-handler.js";
 import { validate } from "../middlewares/validate.js";
 import { createExpenseSchema, updateExpenseSchema } from "../schemas/expense.schema.js";
-import { requireAnyRole } from "../middlewares/auth.middleware.js";
+import { requireAnyRole } from "../auth/require-role.js";
 
 const router = Router();
 

@@ -48,7 +48,7 @@ export async function getExpenseById(req: Request, res: Response) {
  */
 export async function createExpense(req: Request, res: Response) {
   const { amount, currency, category } = req.body;
-  const userId = req.auth!.userId;
+  const userId = req.auth.userId;
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
