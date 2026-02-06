@@ -53,3 +53,39 @@ export function authMiddleware(req: Request, _res: Response, next: NextFunction)
   next();
 }
 
+export function requireRole(role: AuthRole) {
+  return function requireRoleMiddleware(
+    req: Request,
+    _res: Response,
+    next: NextFunction
+  ) {
+    if (req.auth.role !== role) {
+      throw new AppError(
+        "Forbidden",
+        HTTP_STATUS.FORBIDDEN,
+        ERROR_CODE.AUTH_FORBIDDEN
+      );
+    }
+
+    next();
+  };
+}
+
+export function requireAnyRole(roles: AuthRole[]) {
+  return function requireAnyRoleMiddleware(
+    req: Request,
+    _res: Response,
+    next: NextFunction
+  ) {
+    if (!roles.includes(req.auth.role)) {
+      throw new AppError(
+        "Forbidden",
+        HTTP_STATUS.FORBIDDEN,
+        ERROR_CODE.AUTH_FORBIDDEN
+      );
+    }
+
+    next();
+  };
+}
+
