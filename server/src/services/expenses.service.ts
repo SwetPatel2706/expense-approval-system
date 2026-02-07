@@ -11,26 +11,19 @@ import type { Expense, Prisma } from "@prisma/client";
  * - ADMIN: all expenses in the company
  */
 export async function getExpenses(auth: AuthContext): Promise<Expense[]> {
-  let whereClause: Prisma.ExpenseWhereInput;
+  // Authorization decision: determine access scope
+  const isScopedToOwnRecords = auth.role === "EMPLOYEE" || auth.role === "MANAGER";
+  const hasUnrestrictedAccess = auth.role === "ADMIN";
 
-  if (auth.role === "EMPLOYEE") {
-    whereClause = {
-      companyId: auth.companyId,
-      userId: auth.userId,
-    };
-  } else if (auth.role === "MANAGER") {
-    whereClause = {
-      companyId: auth.companyId,
-      userId: auth.userId,
-    };
-  } else if (auth.role === "ADMIN") {
-    // ADMIN: intentionally omitting userId filter to access all company expenses
-    whereClause = {
-      companyId: auth.companyId,
-    };
-  } else {
+  if (!isScopedToOwnRecords && !hasUnrestrictedAccess) {
     return [];
   }
+
+  // Build where clause based on authorization decision
+  const whereClause: Prisma.ExpenseWhereInput = {
+    companyId: auth.companyId,
+    ...(isScopedToOwnRecords ? { userId: auth.userId } : {}),
+  };
 
   return prisma.expense.findMany({
     where: whereClause,
@@ -51,29 +44,20 @@ export async function getExpenseById(
   id: string,
   auth: AuthContext
 ): Promise<Expense | null> {
-  let whereClause: Prisma.ExpenseWhereInput;
+  // Authorization decision: determine access scope
+  const isScopedToOwnRecords = auth.role === "EMPLOYEE" || auth.role === "MANAGER";
+  const hasUnrestrictedAccess = auth.role === "ADMIN";
 
-  if (auth.role === "EMPLOYEE") {
-    whereClause = {
-      id,
-      companyId: auth.companyId,
-      userId: auth.userId,
-    };
-  } else if (auth.role === "MANAGER") {
-    whereClause = {
-      id,
-      companyId: auth.companyId,
-      userId: auth.userId,
-    };
-  } else if (auth.role === "ADMIN") {
-    // ADMIN: intentionally omitting userId filter to access any expense in company
-    whereClause = {
-      id,
-      companyId: auth.companyId,
-    };
-  } else {
+  if (!isScopedToOwnRecords && !hasUnrestrictedAccess) {
     return null;
   }
+
+  // Build where clause based on authorization decision
+  const whereClause: Prisma.ExpenseWhereInput = {
+    id,
+    companyId: auth.companyId,
+    ...(isScopedToOwnRecords ? { userId: auth.userId } : {}),
+  };
 
   return prisma.expense.findFirst({
     where: whereClause,
@@ -111,29 +95,20 @@ export async function updateExpense(
   data: Prisma.ExpenseUpdateInput,
   auth: AuthContext
 ): Promise<Expense | null> {
-  let whereClause: Prisma.ExpenseWhereInput;
+  // Authorization decision: determine access scope
+  const isScopedToOwnRecords = auth.role === "EMPLOYEE" || auth.role === "MANAGER";
+  const hasUnrestrictedAccess = auth.role === "ADMIN";
 
-  if (auth.role === "EMPLOYEE") {
-    whereClause = {
-      id,
-      companyId: auth.companyId,
-      userId: auth.userId,
-    };
-  } else if (auth.role === "MANAGER") {
-    whereClause = {
-      id,
-      companyId: auth.companyId,
-      userId: auth.userId,
-    };
-  } else if (auth.role === "ADMIN") {
-    // ADMIN: intentionally omitting userId filter to allow updating any expense in company
-    whereClause = {
-      id,
-      companyId: auth.companyId,
-    };
-  } else {
+  if (!isScopedToOwnRecords && !hasUnrestrictedAccess) {
     return null;
   }
+
+  // Build where clause based on authorization decision
+  const whereClause: Prisma.ExpenseWhereInput = {
+    id,
+    companyId: auth.companyId,
+    ...(isScopedToOwnRecords ? { userId: auth.userId } : {}),
+  };
 
   const result = await prisma.expense.updateMany({
     where: whereClause,
@@ -160,29 +135,20 @@ export async function deleteExpense(
   id: string,
   auth: AuthContext
 ): Promise<{ id: string } | null> {
-  let whereClause: Prisma.ExpenseWhereInput;
+  // Authorization decision: determine access scope
+  const isScopedToOwnRecords = auth.role === "EMPLOYEE" || auth.role === "MANAGER";
+  const hasUnrestrictedAccess = auth.role === "ADMIN";
 
-  if (auth.role === "EMPLOYEE") {
-    whereClause = {
-      id,
-      companyId: auth.companyId,
-      userId: auth.userId,
-    };
-  } else if (auth.role === "MANAGER") {
-    whereClause = {
-      id,
-      companyId: auth.companyId,
-      userId: auth.userId,
-    };
-  } else if (auth.role === "ADMIN") {
-    // ADMIN: intentionally omitting userId filter to allow deleting any expense in company
-    whereClause = {
-      id,
-      companyId: auth.companyId,
-    };
-  } else {
+  if (!isScopedToOwnRecords && !hasUnrestrictedAccess) {
     return null;
   }
+
+  // Build where clause based on authorization decision
+  const whereClause: Prisma.ExpenseWhereInput = {
+    id,
+    companyId: auth.companyId,
+    ...(isScopedToOwnRecords ? { userId: auth.userId } : {}),
+  };
 
   const result = await prisma.expense.deleteMany({
     where: whereClause,
