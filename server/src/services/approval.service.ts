@@ -108,3 +108,47 @@ export async function actOnExpenseApproval(
     return updated ?? null;
   });
 }
+
+/**
+ * Initialize a deterministic approval chain for an expense (MANAGER → ADMIN).
+ * Expense must be DRAFT. Creates steps and sets expense to IN_REVIEW, activeStepOrder = 1.
+ */
+export async function initializeApprovalChain(
+  expenseId: string,
+  auth: AuthContext
+): Promise<Expense | null> {
+  return await prisma.$transaction(async (tx) => {
+    const expense = await tx.expense.findFirst({
+      where: { id: expenseId, companyId: auth.companyId },
+    });
+
+    if (!expense) {
+      return null;
+    }
+
+    if (expense.approvalState !== "DRAFT") {
+      throw new AppError(
+        "Expense is not in draft",
+        HTTP_STATUS.CONFLICT,
+        ERROR_CODE.RESOURCE_CONFLICT
+      );
+    }
+
+    await tx.approvalStep.createMany({
+      data: [
+        { expenseId, stepOrder: 1, approverRole: "MANAGER" },
+        { expenseId, stepOrder: 2, approverRole: "ADMIN" },
+      ],
+    });
+
+    await tx.expense.update({
+      where: { id: expenseId },
+      data: { approvalState: "IN_REVIEW", activeStepOrder: 1 },
+    });
+
+    const updated = await tx.expense.findFirst({
+      where: { id: expenseId, companyId: auth.companyId },
+    });
+    return updated ?? null;
+  });
+}
