@@ -1,6 +1,9 @@
 import prisma from "../db.js";
 import type { AuthContext } from "../auth.types.js";
 import type { Expense, Prisma } from "@prisma/client";
+import { AppError } from "../errors/app-error.js";
+import { ERROR_CODE } from "../errors/error-codes.js";
+import { HTTP_STATUS } from "../constants/http-status.js";
 
 /**
  * Get all expenses visible to the authenticated user based on their role.
@@ -16,7 +19,11 @@ export async function getExpenses(auth: AuthContext): Promise<Expense[]> {
   const hasUnrestrictedAccess = auth.role === "ADMIN";
 
   if (!isScopedToOwnRecords && !hasUnrestrictedAccess) {
-    return [];
+    throw new AppError(
+      "Forbidden",
+      HTTP_STATUS.FORBIDDEN,
+      ERROR_CODE.AUTH_FORBIDDEN
+    );
   }
 
   // Build where clause based on authorization decision
@@ -49,7 +56,11 @@ export async function getExpenseById(
   const hasUnrestrictedAccess = auth.role === "ADMIN";
 
   if (!isScopedToOwnRecords && !hasUnrestrictedAccess) {
-    return null;
+    throw new AppError(
+      "Forbidden",
+      HTTP_STATUS.FORBIDDEN,
+      ERROR_CODE.AUTH_FORBIDDEN
+    );
   }
 
   // Build where clause based on authorization decision
@@ -100,7 +111,11 @@ export async function updateExpense(
   const hasUnrestrictedAccess = auth.role === "ADMIN";
 
   if (!isScopedToOwnRecords && !hasUnrestrictedAccess) {
-    return null;
+    throw new AppError(
+      "Forbidden",
+      HTTP_STATUS.FORBIDDEN,
+      ERROR_CODE.AUTH_FORBIDDEN
+    );
   }
 
   // Build where clause based on authorization decision
@@ -140,7 +155,11 @@ export async function deleteExpense(
   const hasUnrestrictedAccess = auth.role === "ADMIN";
 
   if (!isScopedToOwnRecords && !hasUnrestrictedAccess) {
-    return null;
+    throw new AppError(
+      "Forbidden",
+      HTTP_STATUS.FORBIDDEN,
+      ERROR_CODE.AUTH_FORBIDDEN
+    );
   }
 
   // Build where clause based on authorization decision
