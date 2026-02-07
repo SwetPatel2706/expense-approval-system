@@ -13,30 +13,61 @@ datasource db {
 }
 
 model User {
-  id         String   @id @default(uuid())
-  email      String   @unique
-  role       Role
-  companyId  String
-  managerId  String?
-  manager    User?    @relation("UserManager", fields: [managerId], references: [id])
-  reports    User[]   @relation("UserManager")
-  expenses   Expense[]
-  createdAt  DateTime @default(now())
+  id              String          @id @default(uuid())
+  email           String          @unique
+  role            Role
+  companyId       String
+  managerId       String?
+  manager         User?           @relation("UserManager", fields: [managerId], references: [id])
+  reports         User[]          @relation("UserManager")
+  expenses        Expense[]
+  approvalActions ApprovalAction[]
+  createdAt       DateTime        @default(now())
 }
 
 model Expense {
-  id        String        @id @default(uuid())
-  amount    Decimal
-  currency  String
-  category  String
-  status    ExpenseStatus @default(PENDING)
-  userId    String
-  companyId String
-  user      User          @relation(fields: [userId], references: [id])
-  createdAt DateTime      @default(now())
+  id               String         @id @default(uuid())
+  amount           Decimal
+  currency         String
+  category         String
+  status           ExpenseStatus  @default(PENDING)
+  approvalState    ApprovalState  @default(DRAFT)
+  activeStepOrder  Int?
+  userId           String
+  companyId        String
+  user             User           @relation(fields: [userId], references: [id])
+  approvalSteps    ApprovalStep[]
+  createdAt        DateTime       @default(now())
 
   @@index([companyId, userId])
   @@index([companyId, id])
+}
+
+model ApprovalStep {
+  id           String     @id @default(uuid())
+  expenseId    String
+  stepOrder    Int
+  approverRole Role
+  status       StepStatus @default(PENDING)
+  expense      Expense    @relation(fields: [expenseId], references: [id])
+  actions      ApprovalAction[]
+  createdAt    DateTime   @default(now())
+
+  @@unique([expenseId, stepOrder])
+  @@index([expenseId])
+}
+
+model ApprovalAction {
+  id          String            @id @default(uuid())
+  stepId      String
+  actorUserId String
+  action      ApprovalActionType
+  comment     String?
+  step        ApprovalStep      @relation(fields: [stepId], references: [id])
+  actor       User              @relation(fields: [actorUserId], references: [id])
+  createdAt   DateTime          @default(now())
+
+  @@index([stepId])
 }
 
 enum Role {
@@ -49,5 +80,23 @@ enum ExpenseStatus {
   PENDING
   APPROVED
   REJECTED
+}
+
+enum ApprovalState {
+  DRAFT
+  IN_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum StepStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum ApprovalActionType {
+  APPROVE
+  REJECT
 }
 
