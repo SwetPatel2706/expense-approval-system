@@ -1,9 +1,8 @@
 import prisma from "../db.js";
 import type { AuthContext } from "../auth.types.js";
 import type { Expense, Prisma } from "@prisma/client";
-import { AppError } from "../errors/app-error.js";
-import { ERROR_CODE } from "../errors/error-codes.js";
-import { HTTP_STATUS } from "../constants/http-status.js";
+// unused imports removed
+
 
 type ExpenseAuditTrail = Prisma.ExpenseGetPayload<{
   include: {
@@ -32,11 +31,6 @@ type ExpenseAuditTrail = Prisma.ExpenseGetPayload<{
   };
 }>;
 
-const FORBIDDEN_ERROR = new AppError(
-  "Forbidden",
-  HTTP_STATUS.FORBIDDEN,
-  ERROR_CODE.AUTH_FORBIDDEN
-);
 
 export async function getMyExpenses(auth: AuthContext): Promise<Expense[]> {
   return prisma.expense.findMany({
@@ -72,7 +66,7 @@ export async function getExpenseById(
   }
 
   if (auth.role !== "MANAGER") {
-    throw FORBIDDEN_ERROR;
+    return null;
   }
 
   const expense = await prisma.expense.findFirst({
@@ -161,13 +155,11 @@ export async function getExpenseAuditTrail(
     return expense;
   }
 
-  if (auth.role === "EMPLOYEE") {
-    // Employees can only see their own expenses
-    if (expense.userId === auth.userId) {
-      return expense;
-    }
-    return null;
+  // Employees can only see their own expenses
+  if (expense.userId === auth.userId) {
+    return expense;
   }
+  return null;
 
   // Manager: can see if owner or has approval step
   const isOwner = expense.userId === auth.userId;

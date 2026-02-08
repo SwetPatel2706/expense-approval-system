@@ -1,9 +1,8 @@
 import prisma from "../db.js";
 import type { AuthContext } from "../auth.types.js";
 import type { Expense } from "@prisma/client";
-import { AppError } from "../errors/app-error.js";
-import { HTTP_STATUS } from "../constants/http-status.js";
-import { ERROR_CODE } from "../errors/error-codes.js";
+// unused imports removed
+
 
 /**
  * Get all expenses waiting for the current user's approval.
@@ -57,6 +56,10 @@ export async function getPendingApprovals(auth: AuthContext): Promise<Expense[]>
  * - The expense owner (all roles)
  * - Admins (all expenses)
  * - Managers/Employees: only if they have/had an approval step on this expense
+ *
+ * NOTE: This overlaps with `expense-read.service.ts` getExpenseAuditTrail.
+ * `getExpenseAuditTrail` is the canonical full-detail view for the expense page.
+ * This function handles the specific "Approval History" view logic and access checking.
  */
 export async function getApprovalHistory(
     expenseId: string,
@@ -69,6 +72,7 @@ export async function getApprovalHistory(
 
     // First pass: check visibility using the same logic as expense-read.service
     // to ensure consistency and prevent unauthorized access
+    // TODO: Optimize to single query if possible, but keep 2-step for strict visibility safety for now.
     const expense = await prisma.expense.findFirst({
         where: {
             id: expenseId,
