@@ -53,3 +53,26 @@ export function authMiddleware(req: Request, _res: Response, next: NextFunction)
   next();
 }
 
+export function requireAnyRole(roles: AuthRole[]) {
+  return (req: Request, _res: Response, next: NextFunction) => {
+    if (!req.auth) {
+      // Should act after authMiddleware, so this is just a safety check
+      throw new AppError(
+        "Missing authentication context",
+        HTTP_STATUS.INTERNAL_SERVER_ERROR,
+        ERROR_CODE.INTERNAL_SERVER_ERROR
+      );
+    }
+
+    if (!roles.includes(req.auth.role)) {
+      throw new AppError(
+        `Requires one of roles: ${roles.join(", ")}`,
+        HTTP_STATUS.FORBIDDEN,
+        ERROR_CODE.AUTH_FORBIDDEN
+      );
+    }
+
+    next();
+  };
+}
+

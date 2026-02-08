@@ -1,116 +1,72 @@
-// server/src/controllers/expenses.controller.ts
-
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
+import { asyncHandler } from "../middlewares/async-handler.js";
+import { HTTP_STATUS } from "../constants/http-status.js";
 import { AppError } from "../errors/app-error.js";
 import { ERROR_CODE } from "../errors/error-codes.js";
-import { HTTP_STATUS } from "../constants/http-status.js";
-import * as expenseService from "../services/expenses.service.js";
-
-
-/**
- * GET all expenses
-*/
-export async function getExpenses(req: Request, res: Response) {
-  const expenses = await expenseService.getExpenses(req.auth);
-  
-  res.status(HTTP_STATUS.OK).json({
-    data: expenses,
-  });
-}
+import * as expensesService from "../services/expenses.service.js";
+import * as expenseReadService from "../services/expense-read.service.js";
+import * as approvalService from "../services/approval.service.js";
 
 /**
- * GET expense by id
-*/
-export async function getExpenseById(req: Request, res: Response) {
-  const { id } = req.params;
-  const expenseId = typeof id === "string" ? id : id[0];
-  
-  const expense = await expenseService.getExpenseById(expenseId, req.auth);
-  
-  if (!expense) {
-    throw new AppError(
-      "Expense not found",
-      HTTP_STATUS.NOT_FOUND,
-      ERROR_CODE.RESOURCE_NOT_FOUND
-    );
-  }
-  
-  res.status(HTTP_STATUS.OK).json({
-    data: expense,
-  });
-}
-
-/**
- * CREATE expense
+ * GET /expenses
+ * List all expenses visible to the current user.
  */
-export async function createExpense(req: Request, res: Response) {
-  const { amount, currency, category } = req.body;
+export const getExpensesHandler = asyncHandler(
+  async (req: Request, res: Response) => {
+    const expenses = await expensesService.getExpenses(req.auth);
+    res.status(HTTP_STATUS.OK).json(expenses);
+  }
+);
 
-  try {
-    const expense = await expenseService.createExpense(
-      { amount, currency, category },
-      req.auth
-    );
+/**
+ * GET /expenses/:id
+ * Get a specific expense by ID.
+ * Uses expense-read service to allow approvers to see expenses they don't own.
+ */
+export const getExpenseByIdHandler = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const expense = await expenseReadService.getExpenseById(id, req.auth);
 
-    res.status(HTTP_STATUS.CREATED).json({
-      data: expense,
-    });
-  } catch (error) {
-    if (error instanceof Error && error.message === "User not found") {
+    if (!expense) {
       throw new AppError(
-        "User not found",
+        "Expense not found",
         HTTP_STATUS.NOT_FOUND,
         ERROR_CODE.RESOURCE_NOT_FOUND
       );
     }
-    throw error;
+
+    res.status(HTTP_STATUS.OK).json(expense);
   }
-}
+);
 
 /**
- * UPDATE expense
+ * POST /expenses
+ * Create a new expense.
  */
-export async function updateExpense(req: Request, res: Response) {
-  const { id } = req.params;
-  const expenseId = typeof id === "string" ? id : id[0];
+export const createExpenseHandler = asyncHandler(
+  async (req: Request, res: Response) => {
+    // Validation handled by validate(createExpenseSchema) middleware
+    // req.body is now safe and typed (implicitly)
+    const { amount, currency, category } = req.body;
 
-  const updatedExpense = await expenseService.updateExpense(
-    expenseId,
-    req.body,
-    req.auth
-  );
-
-  if (!updatedExpense) {
-    throw new AppError(
-      "Expense not found",
-      HTTP_STATUS.NOT_FOUND,
-      ERROR_CODE.RESOURCE_NOT_FOUND
+    const expense = await expensesService.createExpense(
+      { amount, currency, category },
+      req.auth
     );
-  }
 
-  res.status(HTTP_STATUS.OK).json({
-    data: updatedExpense,
-  });
-}
+    res.status(HTTP_STATUS.CREATED).json(expense);
+  }
+);
 
 /**
- * DELETE expense
+ * POST /expenses/:id/submit
+ * Submit an expense for approval.
  */
-export async function deleteExpense(req: Request, res: Response) {
-  const { id } = req.params;
-  const expenseId = typeof id === "string" ? id : id[0];
-
-  const result = await expenseService.deleteExpense(expenseId, req.auth);
-
-  if (!result) {
-    throw new AppError(
-      "Expense not found",
-      HTTP_STATUS.NOT_FOUND,
-      ERROR_CODE.RESOURCE_NOT_FOUND
-    );
+export const submitExpenseHandler = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const expense = await approvalService.startApprovalFlow(id, req.auth);
+    res.status(HTTP_STATUS.OK).json(expense);
   }
-
-  res.status(HTTP_STATUS.OK).json({
-    data: result,
-  });
-}
+);

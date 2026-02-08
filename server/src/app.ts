@@ -3,7 +3,8 @@ import express from 'express';
 import cors from 'cors';
 import { httpConfig } from './config/http.config.js';
 import prisma from './db.js';
-import expenseRoutes from './routes/expenses.js';
+import expenseRoutes from './routes/expenses.routes.js';
+import approvalRoutes from './routes/approvals.routes.js';
 import { errorHandler } from './middlewares/error-handler.js';
 import { authMiddleware } from './middlewares/auth.middleware.js';
 
@@ -19,6 +20,7 @@ app.get('/health', async (req, res) => {
 
 app.use(authMiddleware);
 app.use('/expenses', expenseRoutes);
+app.use('/approvals', approvalRoutes);
 
 app.use(errorHandler);
 
