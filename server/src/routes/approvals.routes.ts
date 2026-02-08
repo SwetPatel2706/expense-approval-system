@@ -8,6 +8,9 @@ const router = Router();
 // List pending approvals
 router.get("/pending", approvalsController.getPendingApprovalsHandler);
 
+// Get approval history
+router.get("/history/:expenseId", approvalsController.getApprovalHistoryHandler);
+
 // Approve or Reject an expense
 // Note: Parameter name should match checking inside controller if we used it, 
 // but here we used `req.params.expenseId` in controller, so we must use `:expenseId` here.

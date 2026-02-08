@@ -84,10 +84,10 @@ export async function getExpenseById(
       approvalSteps: {
         where: {
           approverRole: auth.role,
-          status: "PENDING",
         },
         select: {
           stepOrder: true,
+          status: true,
         },
       },
     },
@@ -98,14 +98,10 @@ export async function getExpenseById(
   }
 
   const isOwner = expense.userId === auth.userId;
-  const hasPendingApproval =
-    expense.approvalState === "IN_REVIEW" &&
-    expense.activeStepOrder !== null &&
-    expense.approvalSteps.some(
-      (step) => step.stepOrder === expense.activeStepOrder
-    );
+  // Manager can see if they own it OR have any approval step (pending or already acted on)
+  const hasApprovalStep = expense.approvalSteps.length > 0;
 
-  if (!isOwner && !hasPendingApproval) {
+  if (!isOwner && !hasApprovalStep) {
     return null;
   }
 
@@ -114,55 +110,12 @@ export async function getExpenseById(
   return expenseData;
 }
 
-export async function getPendingApprovals(
-  auth: AuthContext
-): Promise<Expense[]> {
-  if (auth.role === "EMPLOYEE") {
-    throw FORBIDDEN_ERROR;
-  }
-
-  const pendingSteps = await prisma.approvalStep.findMany({
-    where: {
-      approverRole: auth.role,
-      status: "PENDING",
-      expense: {
-        companyId: auth.companyId,
-        approvalState: "IN_REVIEW",
-        activeStepOrder: { not: null },
-      },
-    },
-    include: {
-      expense: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
-  const expensesById = new Map<string, Expense>();
-
-  for (const step of pendingSteps) {
-    if (step.expense.activeStepOrder !== step.stepOrder) {
-      continue;
-    }
-
-    expensesById.set(step.expense.id, step.expense);
-  }
-
-  return Array.from(expensesById.values());
-}
-
 export async function getExpenseAuditTrail(
   id: string,
   auth: AuthContext
 ): Promise<ExpenseAuditTrail | null> {
-  const visibleExpense = await getExpenseById(id, auth);
-
-  if (!visibleExpense) {
-    return null;
-  }
-
-  return prisma.expense.findFirst({
+  // Fetch with full audit trail data in a single query
+  const expense = await prisma.expense.findFirst({
     where: {
       id,
       companyId: auth.companyId,
@@ -198,4 +151,33 @@ export async function getExpenseAuditTrail(
       },
     },
   });
+
+  if (!expense) {
+    return null;
+  }
+
+  // Apply visibility checks
+  if (auth.role === "ADMIN") {
+    return expense;
+  }
+
+  if (auth.role === "EMPLOYEE") {
+    // Employees can only see their own expenses
+    if (expense.userId === auth.userId) {
+      return expense;
+    }
+    return null;
+  }
+
+  // Manager: can see if owner or has approval step
+  const isOwner = expense.userId === auth.userId;
+  const hasApprovalStep = expense.approvalSteps.some(
+    (step) => step.approverRole === auth.role
+  );
+
+  if (isOwner || hasApprovalStep) {
+    return expense;
+  }
+
+  return null;
 }
