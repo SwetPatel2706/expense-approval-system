@@ -48,6 +48,7 @@ export async function listExpenses(auth: AuthContext): Promise<Expense[]> {
     ...(isScopedToOwnRecords ? { userId: auth.userId } : {}),
   };
 
+  // TODO: [PERF] Consider adding index on Expense(companyId, createdAt) for orderBy performance
   return prisma.expense.findMany({
     where: whereClause,
     orderBy: { createdAt: "desc" },
@@ -167,20 +168,20 @@ export async function getExpenseAuditTrail(
     return expense;
   }
 
-  // Employees can only see their own expenses
-  if (expense.userId === auth.userId) {
+  // Owner (EMPLOYEE or MANAGER) can see their own expenses
+  const isOwner = expense.userId === auth.userId;
+  if (isOwner) {
     return expense;
   }
-  return null;
 
-  // Manager: can see if owner or has approval step
-  const isOwner = expense.userId === auth.userId;
-  const hasApprovalStep = expense.approvalSteps.some(
-    (step) => step.approverRole === auth.role
-  );
-
-  if (isOwner || hasApprovalStep) {
-    return expense;
+  // MANAGER can see if they have an approval step
+  if (auth.role === "MANAGER") {
+    const hasApprovalStep = expense.approvalSteps.some(
+      (step) => step.approverRole === auth.role
+    );
+    if (hasApprovalStep) {
+      return expense;
+    }
   }
 
   return null;

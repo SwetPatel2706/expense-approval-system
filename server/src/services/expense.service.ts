@@ -34,6 +34,9 @@ export async function createExpense(
 /**
  * Update an expense if it exists and is visible to the authenticated user.
  * Returns null if the expense is not visible.
+ * 
+ * FLAG: Inconsistent with approval.service.ts which throws on not-found.
+ * Consider unifying to throw AppError for consistency in a future phase.
  */
 export async function updateExpense(
   id: string,
@@ -79,6 +82,9 @@ export async function updateExpense(
 /**
  * Delete an expense if it exists and is visible to the authenticated user.
  * Returns null if the expense is not visible.
+ * 
+ * FLAG: Inconsistent with approval.service.ts which throws on not-found.
+ * Consider unifying to throw AppError for consistency in a future phase.
  */
 export async function deleteExpense(
   id: string,

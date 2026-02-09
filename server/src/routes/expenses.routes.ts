@@ -15,7 +15,7 @@ router.get("/:id", expensesController.getExpenseById);
 // Create expense
 router.post(
     "/",
-    requireAnyRole(["EMPLOYEE"]),
+    requireAnyRole(["EMPLOYEE", "MANAGER"]),
     validate(createExpenseSchema),
     expensesController.createExpense
 );

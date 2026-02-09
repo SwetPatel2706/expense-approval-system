@@ -13,8 +13,6 @@ router.get("/pending", approvalsController.getPendingApprovals);
 router.get("/history/:expenseId", approvalsController.getApprovalHistory);
 
 // Approve or Reject an expense
-// Note: Parameter name should match checking inside controller if we used it, 
-// but here we used `req.params.expenseId` in controller, so we must use `:expenseId` here.
 router.post(
     "/:expenseId/act",
     requireAnyRole(["MANAGER", "ADMIN"]),

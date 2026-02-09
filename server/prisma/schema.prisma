@@ -55,6 +55,7 @@ model ApprovalStep {
 
   @@unique([expenseId, stepOrder])
   @@index([expenseId])
+  // TODO: [PERF] Consider adding @@index([approverRole, status]) for getPendingApprovals query
 }
 
 model ApprovalAction {
@@ -68,6 +69,7 @@ model ApprovalAction {
   createdAt   DateTime          @default(now())
 
   @@index([stepId])
+  // TODO: [PERF] Consider adding @@index([actorUserId]) if querying by actor becomes frequent
 }
 
 enum Role {

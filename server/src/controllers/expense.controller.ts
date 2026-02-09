@@ -4,6 +4,8 @@ import { HTTP_STATUS } from "../constants/http-status.js";
 import { AppError } from "../errors/app-error.js";
 import { ERROR_CODE } from "../errors/error-codes.js";
 import { z } from "zod";
+// FLAG: Naming inconsistency - `expensesService` (plural) vs `expenseReadService` (singular)
+// Consider unifying to singular in a future refactor phase.
 import * as expensesService from "../services/expense.service.js";
 import * as expenseReadService from "../services/expense-read.service.js";
 import * as approvalService from "../services/approval.service.js";

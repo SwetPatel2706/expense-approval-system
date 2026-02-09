@@ -20,6 +20,7 @@ export async function getPendingApprovals(auth: AuthContext): Promise<Expense[]>
     // 3. Expense is in IN_REVIEW state
     // 4. Expense active step matches this step's order (it is arguably redundant with status=PENDING but safer)
     // 5. Company matches
+    // TODO: [PERF] Consider adding index on ApprovalStep(approverRole, status) for this query
     const pendingSteps = await prisma.approvalStep.findMany({
         where: {
             approverRole: auth.role,

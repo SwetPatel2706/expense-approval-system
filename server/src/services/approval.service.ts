@@ -1,4 +1,4 @@
-import { PrismaClient, Expense, ApprovalStep, ApprovalState, ApprovalActionType, Role, Prisma } from "@prisma/client";
+import { Expense, ApprovalStep, Prisma } from "@prisma/client";
 import prisma from "../db.js";
 import { AppError } from "../errors/app-error.js";
 import { ERROR_CODE } from "../errors/error-codes.js";
@@ -79,9 +79,9 @@ export async function actOnExpenseApproval(
     validateActorIsApprover(activeStep, auth);
 
     // 2. Record Action
+    // Note: expenseId is accessible via step.expenseId (relation)
     await tx.approvalAction.create({
       data: {
-        expenseId,
         stepId: activeStep.id,
         actorUserId: auth.userId,
         action: action === "APPROVE" ? "APPROVE" : "REJECT",
@@ -249,11 +249,6 @@ async function transitionToApproved(
     },
   });
 }
-
-// Ensure all variables are explicitly typed for better type safety
-
-// Improved error handling for better debugging
-// Consider adding logging for production environments
 
 // Invariant:
 // - status reflects final outcome (APPROVED / REJECTED)
