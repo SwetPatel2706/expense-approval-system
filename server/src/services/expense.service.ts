@@ -5,75 +5,9 @@ import { AppError } from "../errors/app-error.js";
 import { ERROR_CODE } from "../errors/error-codes.js";
 import { HTTP_STATUS } from "../constants/http-status.js";
 
-/**
- * Get all expenses visible to the authenticated user based on their role.
- * 
- * Visibility rules:
- * - EMPLOYEE: own expenses only
- * - MANAGER: own expenses only
- * - ADMIN: all expenses in the company
- */
-export async function getExpenses(auth: AuthContext): Promise<Expense[]> {
-  // Authorization decision: determine access scope
-  const isScopedToOwnRecords = auth.role === "EMPLOYEE" || auth.role === "MANAGER";
-  const hasUnrestrictedAccess = auth.role === "ADMIN";
 
-  if (!isScopedToOwnRecords && !hasUnrestrictedAccess) {
-    throw new AppError(
-      "Forbidden",
-      HTTP_STATUS.FORBIDDEN,
-      ERROR_CODE.AUTH_FORBIDDEN
-    );
-  }
 
-  // Build where clause based on authorization decision
-  const whereClause: Prisma.ExpenseWhereInput = {
-    companyId: auth.companyId,
-    ...(isScopedToOwnRecords ? { userId: auth.userId } : {}),
-  };
 
-  return prisma.expense.findMany({
-    where: whereClause,
-    orderBy: { createdAt: "desc" },
-  });
-}
-
-/**
- * Get a single expense by ID if visible to the authenticated user.
- * Returns null if the expense is not visible.
- * 
- * Visibility rules:
- * - EMPLOYEE: own expenses only
- * - MANAGER: own expenses only
- * - ADMIN: all expenses in the company
- */
-export async function getExpenseById(
-  id: string,
-  auth: AuthContext
-): Promise<Expense | null> {
-  // Authorization decision: determine access scope
-  const isScopedToOwnRecords = auth.role === "EMPLOYEE" || auth.role === "MANAGER";
-  const hasUnrestrictedAccess = auth.role === "ADMIN";
-
-  if (!isScopedToOwnRecords && !hasUnrestrictedAccess) {
-    throw new AppError(
-      "Forbidden",
-      HTTP_STATUS.FORBIDDEN,
-      ERROR_CODE.AUTH_FORBIDDEN
-    );
-  }
-
-  // Build where clause based on authorization decision
-  const whereClause: Prisma.ExpenseWhereInput = {
-    id,
-    companyId: auth.companyId,
-    ...(isScopedToOwnRecords ? { userId: auth.userId } : {}),
-  };
-
-  return prisma.expense.findFirst({
-    where: whereClause,
-  });
-}
 
 /**
  * Create a new expense for the authenticated user.

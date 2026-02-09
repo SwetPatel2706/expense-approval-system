@@ -3,14 +3,16 @@ import { asyncHandler } from "../middlewares/async-handler.js";
 import { HTTP_STATUS } from "../constants/http-status.js";
 import { AppError } from "../errors/app-error.js";
 import { ERROR_CODE } from "../errors/error-codes.js";
+import { z } from "zod";
 import * as approvalService from "../services/approval.service.js";
 import * as approvalReadService from "../services/approval-read.service.js";
+import { actOnApprovalSchema } from "../schemas/approval.schema.js";
 
 /**
  * GET /approvals/pending
  * List all pending approvals for the current user (based on their role).
  */
-export const getPendingApprovalsHandler = asyncHandler(
+export const getPendingApprovals = asyncHandler(
     async (req: Request, res: Response) => {
         const expenses = await approvalReadService.getPendingApprovals(req.auth);
         res.status(HTTP_STATUS.OK).json(expenses);
@@ -21,7 +23,7 @@ export const getPendingApprovalsHandler = asyncHandler(
  * GET /approvals/history/:expenseId
  * Get the approval history for an expense.
  */
-export const getApprovalHistoryHandler = asyncHandler(
+export const getApprovalHistory = asyncHandler(
     async (req: Request, res: Response) => {
         const { expenseId } = req.params;
         const expense = await approvalReadService.getApprovalHistory(expenseId as string, req.auth);
@@ -42,11 +44,12 @@ export const getApprovalHistoryHandler = asyncHandler(
  * POST /approvals/:expenseId/act
  * Approve or Reject an expense.
  */
-export const actOnApprovalHandler = asyncHandler(
+export const actOnApproval = asyncHandler(
     async (req: Request, res: Response) => {
         const { expenseId } = req.params;
         // Validation handled by validate(actOnApprovalSchema) middleware
-        const { action, comment } = req.body;
+        type ActOnApprovalBody = z.infer<typeof actOnApprovalSchema>;
+        const { action, comment } = req.body as ActOnApprovalBody;
 
         const updatedExpense = await approvalService.actOnExpenseApproval(
             expenseId as string,

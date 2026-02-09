@@ -32,12 +32,24 @@ type ExpenseAuditTrail = Prisma.ExpenseGetPayload<{
 }>;
 
 
-export async function getMyExpenses(auth: AuthContext): Promise<Expense[]> {
+/**
+ * Get all expenses visible to the authenticated user.
+ * 
+ * Visibility rules:
+ * - EMPLOYEE: own expenses only
+ * - MANAGER: own expenses only
+ * - ADMIN: all expenses in the company
+ */
+export async function listExpenses(auth: AuthContext): Promise<Expense[]> {
+  const isScopedToOwnRecords = auth.role === "EMPLOYEE" || auth.role === "MANAGER";
+
+  const whereClause: Prisma.ExpenseWhereInput = {
+    companyId: auth.companyId,
+    ...(isScopedToOwnRecords ? { userId: auth.userId } : {}),
+  };
+
   return prisma.expense.findMany({
-    where: {
-      companyId: auth.companyId,
-      userId: auth.userId,
-    },
+    where: whereClause,
     orderBy: { createdAt: "desc" },
   });
 }

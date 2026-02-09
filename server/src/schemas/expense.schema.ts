@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 export const createExpenseSchema = z.object({
   amount: z.number().positive(),
-  currency: z.string().min(1),
+  currency: z.string().length(3).toUpperCase(),
   category: z.string().min(1),
 });
 

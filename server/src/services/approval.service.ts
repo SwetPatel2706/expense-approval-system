@@ -4,6 +4,7 @@ import { AppError } from "../errors/app-error.js";
 import { ERROR_CODE } from "../errors/error-codes.js";
 import { HTTP_STATUS } from "../constants/http-status.js";
 import { AuthContext } from "../auth.types.js";
+import { getApprovalSteps } from "../config/approval-flow.config.js";
 
 /**
  * Starts the approval flow for an expense.
@@ -37,12 +38,14 @@ export async function startApprovalFlow(
     }
 
     // 2. State Transition: DRAFT -> IN_REVIEW
-    // Create fixed steps: MANAGER -> ADMIN
+    const steps = getApprovalSteps(expense);
+
     await tx.approvalStep.createMany({
-      data: [
-        { expenseId, stepOrder: 1, approverRole: "MANAGER" },
-        { expenseId, stepOrder: 2, approverRole: "ADMIN" },
-      ],
+      data: steps.map((step) => ({
+        expenseId,
+        stepOrder: step.order,
+        approverRole: step.role,
+      })),
     });
 
     const updatedExpense = await tx.expense.update({
