@@ -1,0 +1,154 @@
+.expenses-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+
+.title-area h2 {
+    font-size: 1.875rem;
+    /* text-3xl */
+    font-weight: 900;
+    color: var(--color-slate-900);
+    line-height: 1.25;
+}
+
+.title-area p {
+    font-size: 0.875rem;
+    color: var(--color-slate-500);
+    margin-top: 0.25rem;
+}
+
+.tabs-container {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--color-slate-200);
+    padding-bottom: 0.75rem;
+    overflow-x: auto;
+}
+
+.tab-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-slate-500);
+    background: none;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.tab-btn:hover {
+    background-color: var(--color-slate-100);
+    color: var(--color-slate-700);
+}
+
+.tab-btn.active {
+    background-color: var(--color-info-bg);
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.expenses-table-container {
+    background-color: var(--color-white);
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-slate-200);
+    /* border-primary/10 */
+    overflow: hidden;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.expenses-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.expenses-table th {
+    padding: 1rem 1.5rem;
+    font-size: 0.6875rem;
+    /* text-[11px] */
+    font-weight: 700;
+    color: var(--color-slate-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--color-slate-200);
+    /* border-primary/5 */
+    background-color: var(--color-slate-50);
+    /* bg-slate-50/50 */
+}
+
+.expenses-table td {
+    padding: 1.25rem 1.5rem;
+    /* py-5 */
+    border-bottom: 1px solid var(--color-slate-100);
+    /* divide-primary/5 */
+    vertical-align: middle;
+}
+
+.expenses-table tr:last-child td {
+    border-bottom: none;
+}
+
+.expenses-table tr:hover {
+    background-color: var(--color-slate-50);
+    /* hover:bg-primary/5 */
+}
+
+.amount-cell {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--color-slate-900);
+    min-width: 80px;
+}
+
+.category-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-slate-600);
+    font-weight: 500;
+    min-width: 120px;
+}
+
+.date-cell {
+    font-size: 0.875rem;
+    color: var(--color-slate-500);
+}
+
+.action-btn {
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    background: none;
+    border: 1px solid transparent;
+    color: var(--color-slate-400);
+    cursor: pointer;
+    display: inline-flex;
+    transition: all 0.2s;
+}
+
+.action-btn:hover {
+    background-color: var(--color-white);
+    border-color: var(--color-slate-200);
+    color: var(--color-slate-600);
+}
+
+.submit-btn {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    background: none;
+    border: 1px solid var(--color-primary);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.submit-btn:hover {
+    background-color: var(--color-info-bg);
+}

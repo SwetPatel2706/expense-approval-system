@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Authentication | ExpenseSystem</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#195de6",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased transition-colors duration-200">
+<div class="relative flex h-screen w-full flex-col items-center justify-center overflow-x-hidden p-4">
+<!-- Header / Logo Area -->
+<header class="mb-8 flex flex-col items-center gap-2">
+<div class="flex items-center justify-center rounded-xl bg-primary/10 p-3 text-primary dark:bg-primary/20">
+<span class="material-symbols-outlined text-4xl" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+<h1 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">ExpenseSystem</h1>
+</header>
+<!-- Main Auth Card -->
+<main class="w-full max-w-md">
+<div class="rounded-xl border border-slate-200 bg-white p-8 shadow-xl shadow-slate-200/50 dark:border-slate-800 dark:bg-slate-900 dark:shadow-none">
+<!-- Title Section -->
+<div class="mb-8 text-center">
+<h2 class="text-xl font-bold text-slate-900 dark:text-white">Authentication</h2>
+<p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Select your identity to access the management system.</p>
+</div>
+<!-- Form -->
+<form class="space-y-5" onsubmit="return false;">
+<!-- User ID Input -->
+<div class="flex flex-col gap-1.5">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300" for="user-id">
+                            User ID <span class="text-primary">*</span>
+</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl" data-icon="person">person</span>
+<input class="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-10 pr-4 text-sm text-slate-900 outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-primary" id="user-id" placeholder="e.g. user_123" required="" type="text"/>
+</div>
+</div>
+<!-- Company ID Input -->
+<div class="flex flex-col gap-1.5">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300" for="company-id">
+                            Company ID <span class="text-primary">*</span>
+</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl" data-icon="corporate_fare">corporate_fare</span>
+<input class="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-10 pr-4 text-sm text-slate-900 outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-primary" id="company-id" placeholder="e.g. comp_789" required="" type="text"/>
+</div>
+</div>
+<!-- Role Dropdown -->
+<div class="flex flex-col gap-1.5">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300" for="user-role">
+                            User Role
+                        </label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl" data-icon="shield_person">shield_person</span>
+<select class="w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-10 pr-10 text-sm text-slate-900 outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-primary" id="user-role">
+<option value="employee">Employee</option>
+<option value="manager">Manager</option>
+<option value="admin">Administrator</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 text-xl" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<!-- Submit Button -->
+<button class="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-primary py-3 text-sm font-bold text-white shadow-lg shadow-primary/30 transition-all hover:bg-primary/90 focus:ring-4 focus:ring-primary/40 active:scale-[0.98]" type="submit">
+<span>Enter Workspace</span>
+<span class="material-symbols-outlined text-lg" data-icon="login">login</span>
+</button>
+</form>
+<!-- Footer Divider -->
+<div class="my-8 flex items-center gap-4">
+<div class="h-px flex-1 bg-slate-200 dark:bg-slate-800"></div>
+<span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Internal Mock</span>
+<div class="h-px flex-1 bg-slate-200 dark:bg-slate-800"></div>
+</div>
+<!-- Environment Badge/Note -->
+<div class="flex items-center justify-center gap-2 rounded-lg bg-slate-50 p-3 dark:bg-slate-800/50">
+<span class="material-symbols-outlined text-amber-500 text-lg" data-icon="info">info</span>
+<p class="text-xs font-medium text-slate-600 dark:text-slate-400">
+                        Environment: <span class="text-slate-900 dark:text-white">Staging-Mock-01</span>
+</p>
+</div>
+</div>
+<!-- Page Footer Actions -->
+<div class="mt-8 flex items-center justify-center gap-6">
+<button class="flex items-center gap-1.5 text-xs font-medium text-slate-500 transition-colors hover:text-primary dark:text-slate-400 dark:hover:text-primary">
+<span class="material-symbols-outlined text-base" data-icon="help">help</span>
+                    Help Center
+                </button>
+<button class="flex items-center gap-1.5 text-xs font-medium text-slate-500 transition-colors hover:text-primary dark:text-slate-400 dark:hover:text-primary">
+<span class="material-symbols-outlined text-base" data-icon="settings">settings</span>
+                    System Settings
+                </button>
+</div>
+</main>
+<!-- Background Decorative Elements -->
+<div class="pointer-events-none absolute -left-20 -top-20 h-64 w-64 rounded-full bg-primary/5 blur-3xl dark:bg-primary/10"></div>
+<div class="pointer-events-none absolute -right-20 -bottom-20 h-64 w-64 rounded-full bg-primary/5 blur-3xl dark:bg-primary/10"></div>
+</div>
+</body></html>

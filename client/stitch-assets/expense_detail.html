@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Expense Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#195de6",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                        "destructive": "#ef4444",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .timeline-line {
+            width: 2px;
+            background-color: #e2e8f0;
+            position: absolute;
+            top: 2.5rem;
+            bottom: 0;
+            left: 0.875rem;
+        }
+        .timeline-line-active {
+            background-color: #195de6;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen font-display text-slate-900 dark:text-slate-100">
+<div class="max-w-5xl mx-auto px-4 py-8 md:px-10">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between mb-8">
+<div class="flex items-center gap-3">
+<button class="p-2 hover:bg-primary/10 rounded-lg transition-colors text-primary flex items-center justify-center">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h2 class="text-lg font-semibold">Expense Details</h2>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-3 py-1 bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 rounded-full text-xs font-bold uppercase tracking-wider">Under Review</span>
+</div>
+</header>
+<!-- Summary Header Card -->
+<div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-8 mb-8 text-center">
+<p class="text-sm text-slate-500 dark:text-slate-400 font-medium mb-1 uppercase tracking-widest">Total Amount</p>
+<h1 class="text-5xl font-extrabold text-slate-900 dark:text-white mb-4">$1,250.00</h1>
+<div class="flex items-center justify-center gap-2 text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined text-primary">flight_takeoff</span>
+<span class="font-medium text-lg">Travel &amp; Lodging</span>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Main Content: Timeline & Details -->
+<div class="lg:col-span-2 space-y-8">
+<!-- Owner Info Card -->
+<div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+<div class="flex items-center gap-4">
+<div class="size-16 rounded-full overflow-hidden bg-primary/10 flex items-center justify-center border-2 border-primary/20">
+<img alt="Owner Avatar" class="w-full h-full object-cover" data-alt="Professional headshot of Alex Johnson smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgLQu2diRxZL_sdI3PB8xGFJbgysVK1GaFfEQnj1cmPMWTR8suji4WmpwHIqyDLJAHPUUersWT5ZEyV1Jt81WbfNRcvsnmE3G_RuMdg-LM6bHW7wLIXP5DBCudJ3luMwgVkoH6aRyO0_TuawkX4JTr74VPK44MQjoSWuWVUzi6CJL5P8LJ2CBW3LI0rIAuZzuNjwTclC0CGn9y-vY9fMGjYUJ5K1BvxJM1GAKwb_IewXlm5wV68dcIkza2u9sEDtzAarGiqsbEjnQJ"/>
+</div>
+<div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-white">Alex Johnson</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">Marketing Department • Submitted Oct 24, 2023</p>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t border-slate-100 dark:border-slate-700">
+<h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Description</h4>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                            Client on-boarding trip to San Francisco. Includes flight, 3 nights hotel stay, and local transportation.
+                        </p>
+</div>
+</div>
+<!-- Approval Timeline -->
+<div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-8">Approval Timeline</h3>
+<div class="space-y-12 relative">
+<!-- Step 1: Manager Review (Completed) -->
+<div class="relative flex gap-6">
+<div class="timeline-line timeline-line-active"></div>
+<div class="z-10 size-7 rounded-full bg-primary flex items-center justify-center text-white ring-4 ring-white dark:ring-slate-800">
+<span class="material-symbols-outlined text-sm">check</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-bold text-slate-900 dark:text-white">Step 1: Manager Review</h4>
+<span class="text-xs font-medium text-slate-400">2 hours ago</span>
+</div>
+<div class="flex items-center gap-2 mb-3">
+<span class="text-sm font-semibold text-primary">Approved</span>
+<span class="text-sm text-slate-500">• by Sarah Miller</span>
+</div>
+<div class="bg-primary/5 border border-primary/10 rounded-lg p-3 text-sm text-slate-600 dark:text-slate-300 italic">
+                                    "Receipt looks valid and matches the travel itinerary. Standard client meeting expense."
+                                </div>
+</div>
+</div>
+<!-- Step 2: Admin Review (Current) -->
+<div class="relative flex gap-6">
+<!-- Line doesn't extend past the last node -->
+<div class="z-10 size-7 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-400 ring-4 ring-white dark:ring-slate-800">
+<span class="material-symbols-outlined text-sm">schedule</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-bold text-slate-900 dark:text-white">Step 2: Admin Review</h4>
+<span class="text-xs font-medium text-slate-400 tracking-wide uppercase">In Progress</span>
+</div>
+<div class="flex items-center gap-2 mb-1">
+<span class="text-sm font-medium text-slate-500">Awaiting processing by Finance Admin</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar: Actions -->
+<div class="lg:col-span-1">
+<div class="sticky top-8 space-y-6">
+<div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-6">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Review Action</h3>
+<div class="mb-6">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" for="comment">Internal Comment</label>
+<textarea class="w-full rounded-lg border-slate-300 dark:border-slate-600 dark:bg-slate-900 focus:ring-primary focus:border-primary text-sm" id="comment" placeholder="Add a comment for the team..." rows="4"></textarea>
+</div>
+<div class="space-y-3">
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all">
+<span class="material-symbols-outlined">check_circle</span>
+                                Approve Expense
+                            </button>
+<button class="w-full bg-white dark:bg-slate-900 hover:bg-destructive/10 text-destructive border border-destructive/30 font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all">
+<span class="material-symbols-outlined">cancel</span>
+                                Reject Request
+                            </button>
+</div>
+<p class="mt-4 text-[11px] text-center text-slate-400 uppercase tracking-widest font-bold">
+                            Reviewer: Finance Admin
+                        </p>
+</div>
+<!-- Additional Metadata -->
+<div class="bg-slate-100 dark:bg-slate-800/50 rounded-lg p-4 space-y-3">
+<div class="flex justify-between text-xs">
+<span class="text-slate-500 font-medium">Policy Check</span>
+<span class="text-green-600 font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">verified</span> Passed
+                            </span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-slate-500 font-medium">Tax ID</span>
+<span class="text-slate-700 dark:text-slate-300 font-mono font-bold">TX-882190</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-slate-500 font-medium">Currency</span>
+<span class="text-slate-700 dark:text-slate-300 font-bold">USD</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

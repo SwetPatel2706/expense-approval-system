@@ -1,0 +1,78 @@
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-bg-light);
+    padding: 1rem;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 24rem;
+    background-color: var(--color-white);
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-slate-200);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    overflow: hidden;
+}
+
+.auth-header {
+    padding: 2rem 2rem 0;
+    text-align: center;
+}
+
+.auth-logo {
+    width: 3rem;
+    height: 3rem;
+    background-color: var(--color-primary);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin: 0 auto 1rem;
+    box-shadow: 0 4px 6px -1px rgba(25, 93, 230, 0.3);
+}
+
+.auth-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--color-slate-900);
+}
+
+.auth-subtitle {
+    color: var(--color-slate-500);
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.auth-body {
+    padding: 2rem;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.auth-footer {
+    padding: 1rem;
+    background-color: var(--color-slate-50);
+    border-top: 1px solid var(--color-slate-100);
+    text-align: center;
+}
+
+.environment-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-slate-200);
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-slate-600);
+}

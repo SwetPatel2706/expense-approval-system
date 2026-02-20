@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>All Company Expenses - Admin Panel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#195de6",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-sidebar-item {
+            background-color: #195de615;
+            color: #195de6;
+            border-right: 3px solid #195de6;
+        }
+        /* Hide scrollbar but keep functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased overflow-hidden">
+<div class="flex h-screen w-full">
+<!-- Sidebar Navigation -->
+<aside class="w-64 flex-shrink-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col h-full">
+<div class="p-6 flex items-center gap-3">
+<div class="h-10 w-10 bg-primary rounded-lg flex items-center justify-center text-white shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<div>
+<h1 class="text-sm font-bold uppercase tracking-wider text-slate-500">Expensify Pro</h1>
+<p class="text-xs text-slate-400">Admin Console</p>
+</div>
+</div>
+<nav class="flex-1 mt-4 space-y-1">
+<a class="flex items-center gap-3 px-6 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">receipt_long</span>
+<span class="text-sm font-medium">My Expenses</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">pending_actions</span>
+<span class="text-sm font-medium">Pending Approvals</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 active-sidebar-item" href="#">
+<span class="material-symbols-outlined text-xl">account_balance_wallet</span>
+<span class="text-sm font-medium">All Expenses</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+<div class="p-6 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center" data-alt="Admin user profile picture showing a male face" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC4AMXbfyZQtg0Vll2a1J8Gu8suGc9d1gJOV9kYVXf9Mdym8EWi2EelPeLDipDsmGvLpJZfSrqSkCcdabaRFAQtGvKFNqMhU5KDcN9DTdFoDoa0nknD1-vLCrCwWgTn3I5ynNQBnICCvM1m_uhWI5COlTnoVgLrEsFSl2cwFwxzqCoJz8G4dN2IurQu7htBezSmlyVcFi0SV_xpEJmqcEwu9iXlpMffqAmzWD-BCLloNV-VicpJ4cEWqPO1Zob31qWCaR8JvUgKv6Bq')"></div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-semibold truncate">Alex Rivera</p>
+<p class="text-xs text-slate-500 truncate">Global Admin</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col overflow-hidden">
+<!-- Header Section -->
+<header class="p-6 pb-0 flex flex-col gap-6">
+<div class="flex justify-between items-center">
+<div>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white">All Company Expenses</h2>
+<p class="text-sm text-slate-500 mt-1">Manage and oversee all organizational expenditures across all departments.</p>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
+<span class="material-symbols-outlined text-lg">download</span>
+                            Export CSV
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primary/90 transition-all shadow-md shadow-primary/10">
+<span class="material-symbols-outlined text-lg">add</span>
+                            New Expense
+                        </button>
+</div>
+</div>
+<!-- Filters & Search Bar -->
+<div class="flex flex-wrap gap-3 items-center bg-white dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+<div class="relative flex-1 min-w-[300px]">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border-none rounded-lg text-sm focus:ring-2 focus:ring-primary/20 placeholder:text-slate-400" placeholder="Search by employee, category, or amount..." type="text"/>
+</div>
+<div class="h-8 w-px bg-slate-200 dark:bg-slate-700 hidden lg:block"></div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-3 py-2 bg-slate-50 dark:bg-slate-900 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 border border-transparent hover:border-slate-200 transition-all">
+                            Status: <span class="text-slate-900 dark:text-white">All</span>
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+<button class="flex items-center gap-2 px-3 py-2 bg-slate-50 dark:bg-slate-900 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 border border-transparent hover:border-slate-200 transition-all">
+                            Category: <span class="text-slate-900 dark:text-white">Any</span>
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+<button class="flex items-center gap-2 px-3 py-2 bg-slate-50 dark:bg-slate-900 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 border border-transparent hover:border-slate-200 transition-all">
+                            Date: <span class="text-slate-900 dark:text-white">Last 30 Days</span>
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+</button>
+</div>
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+</div>
+</header>
+<!-- Table Container -->
+<section class="flex-1 overflow-auto p-6 no-scrollbar">
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
+<table class="w-full text-left border-collapse min-w-[1000px]">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800/50 border-bottom border-slate-200 dark:border-slate-700">
+<th class="px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Amount</th>
+<th class="px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Category</th>
+<th class="px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Submitted By</th>
+<th class="px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
+<th class="px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Approval State</th>
+<th class="px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Created Date</th>
+<th class="px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<!-- Row 1 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-4 py-3.5 whitespace-nowrap">
+<span class="text-sm font-bold text-slate-900 dark:text-white">$1,240.00</span>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-lg">flight</span>
+<span class="text-sm text-slate-600 dark:text-slate-400">Travel</span>
+</div>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center text-[10px] font-bold text-blue-600" data-alt="Avatar of Jordan Smith" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA7P0V06znRrvYEzLLICtVIOL2HnYr_CqdtGL13fgRL23DY9EJvb2R0_Hj2wKU7VAHhugL26_bu0H5V05Kx8T-7hKLppXQ-ehvknBiGEhrSbjLHcV4tLTxQKD7vGRBRkrAuMLLMbchcYY5ZNDnHR1Lvr_rHtM06TZTThrrR7c0lrjHa97g5_-clEOieOCerynIazxxGNUksW1ZcdAS4h2HHcTX228Uk5fh3eE4Y2O05quS1uU-vpOVIhKHJ6n6kur1d2XDkrjGJ4D1D'); background-size: cover; background-position: center;"></div>
+<span class="text-sm font-medium text-slate-700 dark:text-slate-300">Jordan Smith</span>
+</div>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap">
+<span class="px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">Paid</span>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap">
+<div class="flex flex-col gap-1 w-24">
+<div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 100%"></div>
+</div>
+<span class="text-[10px] text-slate-400 font-medium italic">Completed (3/3)</span>
+</div>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-500">Oct 24, 2023</td>
+<td class="px-4 py-3.5 whitespace-nowrap text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-4 py-3.5 whitespace-nowrap">
+<span class="text-sm font-bold text-slate-900 dark:text-white">$45.50</span>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-lg">restaurant</span>
+<span class="text-sm text-slate-600 dark:text-slate-400">Meals</span>
+</div>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-600" data-alt="Avatar of Alex Rivera" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBMeEgR4w7Jl0we_AbSBCzGBgBW0cO2NwdryNbJ0nvDFddH3ROX5HGsIL7-jrqcqyUKSfO0mA7K9Q6WgtSUBBvna5eXpiaSNWPdRzJtpayDANpElI9mC3dCgrLIR5tEOn50ow_NWp1h8KrnKV8kKbifVobtQYNxFPfO0x_jkToMNvlGLRKoHN3DTsnNR7dSh8XE1XyJ-W03JAw3x5teVfoJ9-zkWx8ugC4Y0m201YdhXdJIAWyQ9XDXcppKvAsOSxtYEHAeJ9PerblW'); background-size: cover; background-position: center;"></div>
+<span class="text-sm font-medium text-slate-700 dark:text-slate-300">Taylor Ott</span>
+</div>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap">
+<span class="px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">Pending</span>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap">
+<div class="flex flex-col gap-1 w-24">
+<div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 66%"></div>
+</div>
+<span class="text-[10px] text-slate-400 font-medium italic">Level 2/3</span>
+</div>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-500">Oct 25, 2023</td>
+<td class="px-4 py-3.5 whitespace-nowrap text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-4 py-3.5 whitespace-nowrap">
+<span class="text-sm font-bold text-slate-900 dark:text-white">$300.00</span>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-lg">code</span>
+<span class="text-sm text-slate-600 dark:text-slate-400">Software</span>
+</div>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-slate-200" data-alt="Avatar of Casey Vance" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAtJP5yY2t5BBvbQLizTNIOB4Mb-Z_N6AsKgoaFwCPxqDiskTfjwhSJj5AMz3nKxwNm4afAPtLpPavi4X9Xw0eXD3JTWMy1-SK23_8yKYlXdBwfBIxzM6Ma_J4l63v2yYVLVhKChmnF4Zr_nz9Oqe9eRyiBxApknom-h7A-deCyMe-v_Nz69ZxrEpDvokIRZM59rFFSpTLXIcXbY3lXAotgvs6Lb1eTRWry6RavRYQsLo7n7mV0Z429PEFEoQcjE6N_-E0znfxl10St'); background-size: cover; background-position: center;"></div>
+<span class="text-sm font-medium text-slate-700 dark:text-slate-300">Casey Vance</span>
+</div>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap">
+<span class="px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">Approved</span>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap">
+<div class="flex flex-col gap-1 w-24">
+<div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 100%"></div>
+</div>
+<span class="text-[10px] text-slate-400 font-medium italic">Approved</span>
+</div>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-500">Oct 26, 2023</td>
+<td class="px-4 py-3.5 whitespace-nowrap text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-4 py-3.5 whitespace-nowrap">
+<span class="text-sm font-bold text-slate-900 dark:text-white">$890.00</span>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-lg">computer</span>
+<span class="text-sm text-slate-600 dark:text-slate-400">Hardware</span>
+</div>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-slate-200" data-alt="Avatar of Morgan Lee" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA6LTYHOgy-uJZJHav3k0Cd1Aw1EuRUXkrNlS1nAoV1b8hsHow0M3TzMfxTYxmI1B8aa74Q4g7i5yldjwF1s8QaIYUAwjSUQCOO6GyffXaAe4QcuKIA0RLLNuEC-TQ9ya9EXMs3ktlLG9Wz5cRD2oV6iYRsFjar-R-NxxoPm4powdDYcoqAxs7JAtHRsCp_xTqhl_S90v5KbYbVf_NJ4IatNmyABGjahljJFYdQmcUMP2c-f5UnE9WtvmN-8ivfkE-Lw0-yzb_KDWs2'); background-size: cover; background-position: center;"></div>
+<span class="text-sm font-medium text-slate-700 dark:text-slate-300">Morgan Lee</span>
+</div>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap">
+<span class="px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">Draft</span>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap">
+<div class="flex flex-col gap-1 w-24">
+<div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 33%"></div>
+</div>
+<span class="text-[10px] text-slate-400 font-medium italic">Level 1/3</span>
+</div>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-500">Oct 27, 2023</td>
+<td class="px-4 py-3.5 whitespace-nowrap text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-4 py-3.5 whitespace-nowrap">
+<span class="text-sm font-bold text-slate-900 dark:text-white">$120.00</span>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-lg">description</span>
+<span class="text-sm text-slate-600 dark:text-slate-400">Office</span>
+</div>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-slate-200" data-alt="Avatar of Alex Rivera" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBafHx7NgKeo-hbKXED-D2KAGnUxoTZUsHE38RbmSLQyIX4WwydEIus_tVlg2K7I1bUOAGTqutQmGF8cNJTsKNiaNZUGInj6UwLKI3L_toj6uU0-88cYrxpUXCTcm-y5FVaZ8fcxswJXI0mwy0IDxHELzysn_uOvipjuaZPDJ0bUiZ680VPdIIXPtZLoIQW7iIrYxGyw5SJKHHapzh6OrwpBjQF9Z870qS-ibiIlvQGiC1cPv26MLItMXR9UUg8vQNuKRjzR5_4qmnr'); background-size: cover; background-position: center;"></div>
+<span class="text-sm font-medium text-slate-700 dark:text-slate-300">Alex Rivera</span>
+</div>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap">
+<span class="px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400">Rejected</span>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap">
+<div class="flex flex-col gap-1 w-24">
+<div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-rose-500" style="width: 100%"></div>
+</div>
+<span class="text-[10px] text-slate-400 font-medium italic text-rose-500">Failed Policy</span>
+</div>
+</td>
+<td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-500">Oct 28, 2023</td>
+<td class="px-4 py-3.5 whitespace-nowrap text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Pagination Footer -->
+<footer class="px-6 py-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<span class="text-xs text-slate-500 font-medium">Rows per page:</span>
+<select class="bg-slate-50 dark:bg-slate-800 border-none rounded text-xs font-bold text-slate-700 dark:text-slate-300 focus:ring-1 focus:ring-primary/20">
+<option>10</option>
+<option selected="">20</option>
+<option>50</option>
+</select>
+<span class="text-xs text-slate-400">Showing 1-20 of 1,245 entries</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-400 hover:bg-slate-50 transition-all disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-lg">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-white text-xs font-bold shadow-sm">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-600 dark:text-slate-400 text-xs font-medium hover:bg-slate-50 dark:hover:bg-slate-800">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-600 dark:text-slate-400 text-xs font-medium hover:bg-slate-50 dark:hover:bg-slate-800">3</button>
+<span class="text-slate-400">...</span>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-600 dark:text-slate-400 text-xs font-medium hover:bg-slate-50 dark:hover:bg-slate-800">63</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-400 hover:bg-slate-50 transition-all">
+<span class="material-symbols-outlined text-lg">chevron_right</span>
+</button>
+</div>
+</footer>
+</main>
+</div>
+</body></html>

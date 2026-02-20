@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Expenses - SaaS Corp</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#195de6",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 antialiased min-h-screen flex">
+<!-- Sidebar Navigation -->
+<aside class="w-64 border-r border-primary/10 bg-white dark:bg-background-dark/50 flex flex-col fixed h-full transition-colors duration-200">
+<div class="p-6 flex items-center gap-3">
+<div class="size-10 bg-primary rounded-lg flex items-center justify-center text-white shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<div>
+<h1 class="text-sm font-bold tracking-tight text-slate-900 dark:text-white uppercase">SaaS Corp</h1>
+<p class="text-[10px] font-medium text-slate-500 uppercase tracking-widest">Employee Portal</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1 mt-4">
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-primary/5 hover:text-primary rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px]">grid_view</span>
+<span class="text-sm font-semibold">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-primary bg-primary/10 rounded-lg transition-all border-l-4 border-primary group" href="#">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+<span class="text-sm font-semibold">My Expenses</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-primary/5 hover:text-primary rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="text-sm font-semibold">Settings</span>
+</a>
+</nav>
+<div class="p-4 mt-auto">
+<div class="bg-primary/5 rounded-xl p-4 border border-primary/10">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-slate-200 overflow-hidden" data-alt="Portrait of a male employee" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA5o3Q8HDqvkAoQxyPUjmxGmqjSdLwMqYMTzrRl7nfJnwcJLECRjJBHH41e8f49OiFsBNZsn2AVdnqKegX0wOMYdiGvelt8NWksjh_M8uhVZQLrHVuKS-dt4UJh25BWyyr8w2ZUAp2KQ0A3R-dazte-FN3BxiSADvMtftkAMtDm9osFDbvzYTulz-uhs8pNJibHu9HU6r_zcAcBkQIG_4eVFUja0_uSgz1PCKtxhfMc7xq16Abbk_Dios7_nprzxQqGtPFYO05QQW0D'); background-size: cover;"></div>
+<div>
+<p class="text-xs font-bold text-slate-900">Alex Rivers</p>
+<p class="text-[10px] text-slate-500">Product Designer</p>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="ml-64 flex-1 p-8 lg:p-10">
+<!-- Top Section -->
+<header class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+<div>
+<h2 class="text-3xl font-black text-slate-900 tracking-tight">My Expenses</h2>
+<p class="text-slate-500 text-sm mt-1">Track and manage your reimbursement requests</p>
+</div>
+<button class="bg-primary text-white px-5 py-2.5 rounded-lg font-bold text-sm flex items-center gap-2 hover:bg-primary/90 transition-all shadow-lg shadow-primary/25">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+                Create Expense
+            </button>
+</header>
+<!-- Summary Cards -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+<div class="bg-white p-6 rounded-xl border border-primary/5 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-2">
+<p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Total Submitted</p>
+<span class="material-symbols-outlined text-primary/40 text-sm">payments</span>
+</div>
+<p class="text-2xl font-black text-slate-900">$12,450.00</p>
+</div>
+<div class="bg-white p-6 rounded-xl border border-primary/5 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-2">
+<p class="text-slate-500 text-xs font-bold uppercase tracking-wider">In Review</p>
+<span class="material-symbols-outlined text-blue-400 text-sm">visibility</span>
+</div>
+<p class="text-2xl font-black text-slate-900">8</p>
+</div>
+<div class="bg-white p-6 rounded-xl border border-primary/5 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-2">
+<p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Approved</p>
+<span class="material-symbols-outlined text-emerald-400 text-sm">check_circle</span>
+</div>
+<p class="text-2xl font-black text-slate-900">32</p>
+</div>
+<div class="bg-white p-6 rounded-xl border border-primary/5 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-2">
+<p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Rejected</p>
+<span class="material-symbols-outlined text-rose-400 text-sm">cancel</span>
+</div>
+<p class="text-2xl font-black text-slate-900">3</p>
+</div>
+</section>
+<!-- Main Section: Data Table -->
+<div class="bg-white rounded-xl border border-primary/10 shadow-sm overflow-hidden @container">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50/50 border-b border-primary/5">
+<th class="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-widest w-40">Amount</th>
+<th class="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-widest">Category</th>
+<th class="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-widest">Status</th>
+<th class="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-widest">Approval State</th>
+<th class="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-widest">Created Date</th>
+<th class="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-widest text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-primary/5">
+<!-- Row 1: In Review -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-5">
+<span class="text-sm font-bold text-slate-900">$1,200.00</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary/60 text-lg">flight</span>
+<span class="text-sm text-slate-600 font-medium">Travel</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary">
+                                    In Review
+                                </span>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200">
+                                    Pending Manager
+                                </span>
+</td>
+<td class="px-6 py-5 text-sm text-slate-500">Oct 24, 2023</td>
+<td class="px-6 py-5 text-right">
+<button class="p-1 hover:bg-white rounded border border-transparent hover:border-slate-200 transition-all">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-slate-600">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- Row 2: Approved -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-5">
+<span class="text-sm font-bold text-slate-900">$45.50</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary/60 text-lg">restaurant</span>
+<span class="text-sm text-slate-600 font-medium">Meals</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-600">
+                                    Approved
+                                </span>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200">
+                                    Finance Cleared
+                                </span>
+</td>
+<td class="px-6 py-5 text-sm text-slate-500">Oct 22, 2023</td>
+<td class="px-6 py-5 text-right">
+<button class="p-1 hover:bg-white rounded border border-transparent hover:border-slate-200 transition-all">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-slate-600">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- Row 3: Draft -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-5">
+<span class="text-sm font-bold text-slate-900">$299.00</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary/60 text-lg">code</span>
+<span class="text-sm text-slate-600 font-medium">Software</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600">
+                                    Draft
+                                </span>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200">
+                                    Not Submitted
+                                </span>
+</td>
+<td class="px-6 py-5 text-sm text-slate-500">Oct 21, 2023</td>
+<td class="px-6 py-5 text-right">
+<button class="p-1 hover:bg-white rounded border border-transparent hover:border-slate-200 transition-all">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-slate-600">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- Row 4: Rejected -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-5">
+<span class="text-sm font-bold text-slate-900">$850.00</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary/60 text-lg">computer</span>
+<span class="text-sm text-slate-600 font-medium">Hardware</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-rose-100 text-rose-600">
+                                    Rejected
+                                </span>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-rose-600 border border-rose-200">
+                                    Policy Violation
+                                </span>
+</td>
+<td class="px-6 py-5 text-sm text-slate-500">Oct 19, 2023</td>
+<td class="px-6 py-5 text-right">
+<button class="p-1 hover:bg-white rounded border border-transparent hover:border-slate-200 transition-all">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-slate-600">more_horiz</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-4 bg-slate-50/30 border-t border-primary/5 flex items-center justify-between">
+<p class="text-xs text-slate-500 font-medium">Showing 1-4 of 46 expenses</p>
+<div class="flex items-center gap-2">
+<button class="size-8 flex items-center justify-center rounded border border-slate-200 bg-white text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="size-8 flex items-center justify-center rounded border border-primary bg-primary text-white font-bold text-xs shadow-sm shadow-primary/20">1</button>
+<button class="size-8 flex items-center justify-center rounded border border-slate-200 bg-white text-slate-600 hover:border-primary hover:text-primary transition-colors font-bold text-xs">2</button>
+<button class="size-8 flex items-center justify-center rounded border border-slate-200 bg-white text-slate-600 hover:border-primary hover:text-primary transition-colors font-bold text-xs">3</button>
+<button class="size-8 flex items-center justify-center rounded border border-slate-200 bg-white text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

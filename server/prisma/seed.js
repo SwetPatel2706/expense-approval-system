@@ -14,6 +14,7 @@ async function main() {
       id: 'user-1',
       email: 'employee@example.com',
       role: 'EMPLOYEE',
+      companyId: 'company-1',
     },
   });
 
@@ -24,6 +25,7 @@ async function main() {
       id: 'user-2',
       email: 'manager@example.com',
       role: 'MANAGER',
+      companyId: 'company-1',
     },
   });
 
@@ -34,6 +36,7 @@ async function main() {
       id: 'user-3',
       email: 'admin@example.com',
       role: 'ADMIN',
+      companyId: 'company-1',
     },
   });
 
@@ -48,6 +51,7 @@ async function main() {
         category: 'TRAVEL',
         status: 'PENDING',
         userId: 'user-1',
+        companyId: 'company-1',
       },
       {
         amount: 300.00,
@@ -55,6 +59,7 @@ async function main() {
         category: 'MEALS',
         status: 'PENDING',
         userId: 'user-1',
+        companyId: 'company-1',
       },
       {
         amount: 4500.00,
@@ -62,6 +67,7 @@ async function main() {
         category: 'EQUIPMENT',
         status: 'PENDING',
         userId: 'user-1',
+        companyId: 'company-1',
       },
     ],
   });

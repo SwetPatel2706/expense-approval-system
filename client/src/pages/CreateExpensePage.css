@@ -1,0 +1,125 @@
+.create-expense-container {
+    max-width: 40rem;
+    /* max-w-2xl */
+    margin: 0 auto;
+}
+
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.page-title {
+    font-size: 1.875rem;
+    font-weight: 800;
+    color: var(--color-slate-900);
+}
+
+.form-card {
+    background-color: var(--color-white);
+    padding: 2rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-slate-200);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-slate-700);
+    margin-bottom: 0.5rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-slate-300);
+    color: var(--color-slate-900);
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    outline: none;
+}
+
+.form-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(25, 93, 230, 0.1);
+    /* ring-primary/20 */
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-cancel {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-slate-600);
+    background: none;
+    border: 1px solid var(--color-slate-200);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+    background-color: var(--color-slate-50);
+    color: var(--color-slate-800);
+}
+
+.btn-submit {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-white);
+    background-color: var(--color-primary);
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 6px -1px rgba(25, 93, 230, 0.2);
+    transition: all 0.2s;
+}
+
+.btn-submit:hover {
+    background-color: var(--color-info);
+    /* lighter blue or manipulate opacity */
+    opacity: 0.9;
+}
+
+.btn-submit:disabled {
+    background-color: var(--color-slate-300);
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.input-group {
+    position: relative;
+}
+
+.currency-addon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-slate-500);
+    font-weight: 500;
+    pointer-events: none;
+}
+
+.input-with-addon {
+    padding-left: 2.5rem;
+}
+
+.error-msg {
+    color: var(--color-danger);
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}

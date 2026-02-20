@@ -1,0 +1,44 @@
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.625rem;
+    /* px-2.5 py-1 */
+    border-radius: 9999px;
+    font-size: 0.625rem;
+    /* text-[10px] */
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+
+/* Variants */
+.badge-draft {
+    background-color: var(--color-slate-100);
+    color: var(--color-slate-600);
+}
+
+.badge-pending,
+.badge-in_review {
+    background-color: var(--color-info-bg);
+    /* Use Blue for pending/in-review to match mock 'In Review' pill style */
+    color: var(--color-info);
+    /* Or use Amber if we want 'Pending Manager' style from mock (mock uses slate for 'Pending Manager', Blue for 'In Review')
+     Let's stick to semantic colors: In Review = Blue or Amber. Mock has 'In Review' as Blue. */
+}
+
+/* If detailed status 'PENDING_MANAGER' etc, we might want Amber */
+.badge-warning {
+    background-color: var(--color-warning-bg);
+    color: var(--color-warning);
+}
+
+.badge-approved {
+    background-color: var(--color-success-bg);
+    color: var(--color-success);
+}
+
+.badge-rejected {
+    background-color: var(--color-danger-bg);
+    color: var(--color-danger);
+}
