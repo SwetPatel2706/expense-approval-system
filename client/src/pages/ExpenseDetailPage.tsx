@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { CheckCircle2, XCircle, CircleDot, Circle } from 'lucide-react';
 import { approvalApi } from '../api/approval.api';
 import { expenseApi } from '../api/expense.api';
 import { toExpenseViewModel } from '../adapters/expense.adapter';
 import type { ExpenseViewModel, ApprovalActionViewModel } from '../adapters/expense.adapter';
 import type { ApiError } from '../types';
 import { usePendingApprovals } from '../hooks/usePendingApprovals';
+import { useApprovalAction } from '../hooks/useApprovalAction';
 import { useToastStore } from '../store/useToastStore';
 import { Loader } from '../components/Loader';
 import { StatusBadge } from '../components/StatusBadge';
@@ -25,11 +27,13 @@ export default function ExpenseDetailPage() {
     const [showModal, setShowModal] = useState(false);
     const [actionType, setActionType] = useState<'APPROVE' | 'REJECT' | null>(null);
     const [comment, setComment] = useState('');
-    const [processing, setProcessing] = useState(false);
-    const [conflicted, setConflicted] = useState(false);
 
     // ✅ Authoritative source: server determines eligibility — no role/step inference
     const { actionableIds, loading: pendingLoading } = usePendingApprovals();
+
+    // ✅ Null-safe hook: expense?.id ?? null prevents runtime errors on initial render.
+    //    Conflict/error state resets automatically when navigating to a different expense.
+    const { act, loading: processing, conflict } = useApprovalAction(expense?.id ?? null);
 
     useEffect(() => {
         if (id) loadData();
@@ -71,43 +75,34 @@ export default function ExpenseDetailPage() {
     const submitAction = async () => {
         if (!expense || !actionType) return;
 
-        setProcessing(true);
-        try {
-            await approvalApi.actOnApproval(expense.id, {
-                action: actionType,
-                comment: comment.trim() || undefined,
-            });
+        const updated = await act(actionType, comment);
+
+        if (updated) {
+            // ✅ Update local expense from hook result — no second network call
+            setExpense(updated);
             addToast(
                 `Expense ${actionType === 'APPROVE' ? 'approved' : 'rejected'} successfully`,
                 'success',
             );
             setShowModal(false);
-            await loadData();
-        } catch (err: unknown) {
-            const apiErr = err as ApiError;
-            if (apiErr.status === 409) {
-                // Conflict: expense was already actioned (concurrent action or stale view)
-                addToast(
-                    'Action conflict: this expense was already actioned. Refreshing...',
-                    'error',
-                );
-                setShowModal(false);
-                setConflicted(true); // disable further actions until page is fresh
-                await loadData();
-            } else {
-                addToast(`Failed to ${actionType.toLowerCase()} expense`, 'error');
-            }
-        } finally {
-            setProcessing(false);
+        } else if (conflict) {
+            // 409: expense was already actioned concurrently
+            addToast(
+                'Action conflict: this expense was already actioned by another user.',
+                'error',
+            );
+            setShowModal(false);
         }
+        // Other errors: hook sets error state; toast shown from it is optional — the
+        // modal stays open so the user can retry or cancel.
     };
 
     if (loading || pendingLoading) return <Loader />;
     if (!expense) return <div>Expense not found</div>;
 
-    // ✅ canAct is derived solely from server-returned pending list
+    // ✅ canAct is derived solely from server-returned pending list + hook conflict state
     // No role check. No approvalState check. No activeStep check.
-    const canAct = !conflicted && actionableIds.has(expense.id);
+    const canAct = !conflict && actionableIds.has(expense.id);
 
     return (
         <div className="max-w-4xl mx-auto">
@@ -139,6 +134,16 @@ export default function ExpenseDetailPage() {
                         <span className="detail-label">Submitted On</span>
                         <span className="detail-value">{expense.createdAtLabel}</span>
                     </div>
+
+                    {/* Conflict inline warning */}
+                    {conflict && (
+                        <div className="conflict-warning">
+                            <span>⚠️</span>
+                            <span>
+                                This expense was already actioned. Refresh to see the latest state.
+                            </span>
+                        </div>
+                    )}
 
                     {canAct && (
                         <div className="action-bar">
@@ -244,8 +249,25 @@ interface TimelineItemProps {
 }
 
 function TimelineItem({ role, date, status, actions, isCurrent, isCompleted, isRejected }: TimelineItemProps) {
-    const icon = isRejected ? 'cancel' : isCompleted ? 'check_circle' : isCurrent ? 'radio_button_unchecked' : 'circle';
     const latestAction = actions && actions.length > 0 ? actions[actions.length - 1] : null;
+
+    // ✅ Icons from lucide-react — scale-110 applied on icon ONLY (not container) to
+    //    prevent vertical alignment shift and timeline connector misalignment
+    const Icon = isRejected
+        ? XCircle
+        : isCompleted
+            ? CheckCircle2
+            : isCurrent
+                ? CircleDot
+                : Circle;
+
+    const iconClass = clsx(
+        'transition-colors duration-200',
+        isCompleted && 'text-emerald-500',
+        isRejected && 'text-red-500',
+        isCurrent && 'text-blue-500 scale-110',
+        !isCompleted && !isRejected && !isCurrent && 'text-slate-400',
+    );
 
     return (
         <div className="timeline-item">
@@ -258,7 +280,8 @@ function TimelineItem({ role, date, status, actions, isCurrent, isCompleted, isR
                     isRejected && 'rejected',
                 )}
             >
-                <span className="material-symbols-outlined text-[20px]">{icon}</span>
+                {/* scale-110 is on the icon element itself, not the container div */}
+                <Icon size={20} className={iconClass} />
             </div>
             <div className="timeline-content">
                 <div className="timeline-header">
@@ -275,5 +298,3 @@ function TimelineItem({ role, date, status, actions, isCurrent, isCompleted, isR
         </div>
     );
 }
-
-
