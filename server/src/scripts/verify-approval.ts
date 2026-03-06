@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { startApprovalFlow, actOnExpenseApproval } from "../services/approval.service.js";
-import { createExpense } from "../services/expenses.service.js";
+import { createExpense } from "../services/expense.service.js";
 import prisma from "../db.js";
 import { AuthContext } from "../auth.types.js";
 
