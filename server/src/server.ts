@@ -14,6 +14,10 @@ if (!process.env.DATABASE_URL) {
   process.exit(1);
 }
 
+app.get('/', (req, res) => {
+  res.send('Welcome to the Expense Approval System API');
+});
+
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
   console.log(`📊 Database: ${process.env.DATABASE_URL ? 'Configured' : 'Not configured'}`);
