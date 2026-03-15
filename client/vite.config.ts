@@ -15,11 +15,11 @@ export default defineConfig({
   server: {
     proxy: {
       '/expenses': {
-        target: 'http://localhost:5000',
+        target: process.env.VITE_API_PROXY_TARGET ?? 'http://localhost:5000',
         changeOrigin: true
       },
       '/approvals': {
-        target: 'http://localhost:5000',
+        target: process.env.VITE_API_PROXY_TARGET ?? 'http://localhost:5000',
         changeOrigin: true
       }
     }
