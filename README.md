@@ -8,8 +8,6 @@ Website Link: [https://expense-approval-system-client-kzmvuqrps.vercel.app/](htt
 
 ---
 
-📌 Overview
-
 ## Overview
 
 A web-based platform for company expense management and approval workflows. It helps organizations manage employee expenses, multi-step approvals, and audit trails with role-based access and company-level data isolation.
