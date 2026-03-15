@@ -3,7 +3,12 @@ import { useAuthStore, MOCK_USERS } from '../store/useAuthStore';
 import clsx from 'clsx';
 import './Sidebar.css';
 
-export const Sidebar = () => {
+type SidebarProps = {
+    isOpen?: boolean;
+    onClose?: () => void;
+};
+
+export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     const { user, login } = useAuthStore();
 
     const handleSwitchUser = (userId: string) => {
@@ -16,7 +21,7 @@ export const Sidebar = () => {
     const isManagerOrAdmin = user.role === 'MANAGER' || user.role === 'ADMIN';
 
     return (
-        <aside className="sidebar">
+        <aside className={clsx('sidebar', isOpen && 'sidebar--open')}>
             <div className="sidebar-header">
                 <div className="brand-icon">
                     <span className="material-symbols-outlined">payments</span>
@@ -31,6 +36,7 @@ export const Sidebar = () => {
                 <NavLink
                     to="/"
                     className={({ isActive }) => clsx('nav-link', isActive && 'active')}
+                    onClick={onClose}
                 >
                     <span className="material-symbols-outlined icon">grid_view</span>
                     <span className="label">Dashboard</span>
@@ -39,6 +45,7 @@ export const Sidebar = () => {
                 <NavLink
                     to="/expenses"
                     className={({ isActive }) => clsx('nav-link', isActive && 'active')}
+                    onClick={onClose}
                 >
                     <span className="material-symbols-outlined icon">receipt_long</span>
                     <span className="label">My Expenses</span>
@@ -48,6 +55,7 @@ export const Sidebar = () => {
                     <NavLink
                         to="/approvals"
                         className={({ isActive }) => clsx('nav-link', isActive && 'active')}
+                        onClick={onClose}
                     >
                         <span className="material-symbols-outlined icon">check_circle</span>
                         <span className="label">Approvals</span>

@@ -123,3 +123,23 @@
     font-size: 0.75rem;
     margin-top: 0.25rem;
 }
+
+@media (max-width: 768px) {
+    .create-expense-container {
+        max-width: 100%;
+    }
+
+    .form-card {
+        padding: 1.25rem;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .btn-cancel,
+    .btn-submit {
+        width: 100%;
+    }
+}

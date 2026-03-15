@@ -7,11 +7,12 @@ import type { ExpenseViewModel } from '../adapters/expense.adapter';
 import { Loader } from '../components/Loader';
 import { StatusBadge } from '../components/StatusBadge';
 import { EmptyState } from '../components/EmptyState';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useToastStore } from '../store/useToastStore';
 import './DashboardPage.css';
 
 export default function DashboardPage() {
+    const navigate = useNavigate();
     const { user } = useAuthStore();
     const { addToast } = useToastStore();
     const [expenses, setExpenses] = useState<ExpenseViewModel[]>([]);
@@ -150,7 +151,12 @@ export default function DashboardPage() {
                 ) : (
                     <div className="recent-list">
                         {expenses.slice(0, 5).map((expense) => (
-                            <div key={expense.id} className="recent-item">
+                            <button
+                                key={expense.id}
+                                type="button"
+                                className="recent-item recent-item-button"
+                                onClick={() => navigate(`/expenses/${expense.id}`)}
+                            >
                                 <div className="item-left">
                                     <span className="item-amount">{expense.amountFormatted}</span>
                                     <span className="item-category">{expense.category}</span>
@@ -159,7 +165,7 @@ export default function DashboardPage() {
                                     <StatusBadge status={expense.approvalState} />
                                     <div className="item-date">{expense.createdAtLabel}</div>
                                 </div>
-                            </div>
+                            </button>
                         ))}
                     </div>
                 )}

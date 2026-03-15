@@ -46,14 +46,30 @@ export default function ExpenseDetailPage() {
             setExpense(toExpenseViewModel(dto));
         } catch (err: unknown) {
             const apiErr = err as ApiError;
+
+            // If there is no approval history yet (e.g. draft or simple expense),
+            // fall back to the plain expense endpoint before treating it as "not found".
             if (apiErr.status === 404) {
-                addToast('Expense not found', 'error');
-                navigate('/expenses');
+                try {
+                    const dto = await expenseApi.getExpenseById(id!);
+                    setExpense(toExpenseViewModel(dto));
+                } catch (innerErr: unknown) {
+                    const inner = innerErr as ApiError;
+                    if (inner.status === 404) {
+                        addToast('Expense not found', 'error');
+                        navigate('/expenses');
+                    } else if (inner.status === 403) {
+                        addToast('Access denied', 'error');
+                        navigate('/');
+                    } else {
+                        addToast('Failed to load expense', 'error');
+                    }
+                }
             } else if (apiErr.status === 403) {
                 addToast('Access denied', 'error');
                 navigate('/');
             } else {
-                // Fallback to flat expense if history is unavailable
+                // Other errors from history endpoint: try plain expense as a best-effort fallback.
                 try {
                     const dto = await expenseApi.getExpenseById(id!);
                     setExpense(toExpenseViewModel(dto));
@@ -105,7 +121,7 @@ export default function ExpenseDetailPage() {
     const canAct = !conflict && actionableIds.has(expense.id);
 
     return (
-        <div className="max-w-4xl mx-auto">
+        <div className="expense-detail-page">
             <div className="detail-header">
                 <div>
                     <h2 className="text-2xl font-bold text-slate-900">Expense Details</h2>

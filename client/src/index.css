@@ -151,6 +151,7 @@ body {
   padding: 2rem;
 }
 
+/* Sidebar-aware main offset (desktop) */
 .ml-64 {
   margin-left: 16rem;
 }
@@ -186,6 +187,18 @@ body {
 
 .overflow-x-auto {
   overflow-x: auto;
+}
+
+/* Responsive layout tweaks */
+@media (max-width: 768px) {
+  /* Let content use full width beneath the sidebar on small screens */
+  .ml-64 {
+    margin-left: 0;
+  }
+
+  .p-8 {
+    padding: 1.25rem;
+  }
 }
 
 /* Focus Ring */

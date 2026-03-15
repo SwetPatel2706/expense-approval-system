@@ -95,3 +95,56 @@
     background-color: var(--color-info);
     transform: translateY(-1px);
 }
+
+@media (max-width: 768px) {
+    .section-filters {
+        margin-bottom: 1.25rem;
+    }
+
+    .approvals-table-container {
+        border-radius: 0.75rem;
+        border-width: 0;
+        box-shadow: none;
+    }
+
+    .approvals-table-container .expenses-table {
+        display: block;
+    }
+
+    .approvals-table-container table,
+    .approvals-table-container thead,
+    .approvals-table-container tbody,
+    .approvals-table-container th,
+    .approvals-table-container td,
+    .approvals-table-container tr {
+        display: block;
+        width: 100%;
+    }
+
+    .approvals-table-container thead {
+        display: none;
+    }
+
+    .approvals-table-container tr {
+        background-color: var(--color-white);
+        border-radius: 0.75rem;
+        border: 1px solid var(--color-slate-200);
+        margin-bottom: 0.75rem;
+        padding: 0.75rem 1rem;
+        box-shadow: 0 1px 2px 0 rgb(15 23 42 / 0.04);
+    }
+
+    .approvals-table-container td {
+        border-bottom: none;
+        padding: 0.25rem 0;
+    }
+
+    .approvals-table-container td:last-child {
+        padding-top: 0.5rem;
+    }
+
+    .review-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

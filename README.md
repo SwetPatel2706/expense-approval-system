@@ -1,18 +1,24 @@
 # Expense Approval System
 
----
-
-## Website URL
-
-Website Link: [https://expense-approval-system-client-kzmvuqrps.vercel.app/](https://expense-approval-system-client-kzmvuqrps.vercel.app/)
+Modern, full‑stack expense management and approval workflow app built with the **PERN** stack and a responsive dashboard UI.
 
 ---
 
-## Overview
+## Live Demo
 
-A web-based platform for company expense management and approval workflows. It helps organizations manage employee expenses, multi-step approvals, and audit trails with role-based access and company-level data isolation.
+- **App**: [https://expense-approval-system-client-kzmvuqrps.vercel.app/](https://expense-approval-system-client-kzmvuqrps.vercel.app/)
 
-Built with the PERN stack (PostgreSQL, Express, React, Node.js) and focused on clear approval chains and visibility for both employees and approvers.
+This repo is structured as a monorepo with `client` (React) and `server` (Node/Express) apps.
+
+---
+
+## What this project showcases
+
+- **Real-world domain modeling**: multi-step expense approvals (Employee → Manager → Admin) with explicit lifecycle.
+- **Role-based access control**: per‑company data isolation and authorization enforced on the backend.
+- **Full-stack TypeScript**: shared types, validated API layer, and PostgreSQL via Prisma ORM.
+- **Production-focused setup**: Docker, environment-based config, and Vercel-ready builds for both client and server.
+- **Responsive dashboard UI**: sidebar layout that adapts cleanly from desktop to mobile.
 
 ---
 
@@ -20,17 +26,17 @@ Built with the PERN stack (PostgreSQL, Express, React, Node.js) and focused on c
 
 In many organizations, expense management is still handled through:
 
-- Email chains and ad-hoc requests
+- Email threads and ad-hoc chat messages
 - Spreadsheets with no single source of truth
 - Unclear approval chains and delayed decisions
 - No structured audit trail
 
 This leads to:
 
-- Lack of transparency
+- Lack of transparency into who needs to approve what
 - Delayed or lost approvals
 - Poor tracking and reporting
-- Difficulty scaling across teams
+- Difficulty scaling across teams or companies
 
 ---
 
@@ -86,13 +92,22 @@ Approval order: **Manager** (step 1) → **Admin** (step 2). Both must approve f
 
 ---
 
+## UI & UX Highlights
+
+- **Dashboard** with total submitted, in-review, approved, and rejected expenses.
+- **Sidebar navigation** with clear separation of Dashboard, My Expenses, and Approvals.
+- **Responsive layout** designed to work well on desktop and mobile (no horizontal scrolling; content reflows under the sidebar).
+- **Empty states, loaders, and toast notifications** for friendly feedback.
+
+---
+
 ## Security & Access Control
 
-- Role-based access (Employee, Manager, Admin) enforced on the backend
-- Company-level data isolation (users only see data for their company)
-- Draft expenses visible only to the creator
-- Backend-enforced authorization on every API request
-- No self-approval: approval steps are defined by role, not by user identity
+- Role-based access (Employee, Manager, Admin) enforced on the backend.
+- Company-level data isolation (users only see data for their company).
+- Draft expenses visible only to the creator.
+- Backend-enforced authorization on every API request.
+- No self-approval: approval steps are defined by role, not by user identity.
 
 ---
 
@@ -114,32 +129,59 @@ Approval order: **Manager** (step 1) → **Admin** (step 2). Both must approve f
 
 ---
 
-## Key Features
+## Running the project locally
 
-- **My Expenses:** Create drafts, submit for approval, filter by status (All, Draft, In Review, Approved, Rejected).
-- **Pending Approvals:** For Managers and Admins, list of expenses waiting for their action.
-- **Expense Detail & Timeline:** Full approval history and comments per step.
-- **Dashboard:** Summary of your expenses and (for approvers) pending count.
-- **Company-scoped data:** All queries filtered by company for multi-tenant safety.
-- **Docker support:** Dev and prod Compose setups; Prisma migrations and seed run in container.
+### 1. Clone and install
 
----
+```bash
+git clone <this-repo-url>
+cd expense-approval-system
 
-## Environment & Setup
+# Install dependencies
+cd server && npm install
+cd ../client && npm install
+```
 
-- **Root:** `cp .env.example .env` — used by Docker Compose (optional for local run).
-- **server:** `cp server/.env.example server/.env` — set `DATABASE_URL` to your PostgreSQL connection string (e.g. Neon). Never commit `.env`.
-- **client:** `cp client/.env.example client/.env` — set `VITE_API_URL` to your backend API URL when frontend and API are on different origins (e.g. Vercel). Never commit `.env`.
+### 2. Environment variables
+
+- **Root**: `cp .env.example .env` — used by Docker Compose (optional for local run).
+- **server**: `cp server/.env.example server/.env` — set `DATABASE_URL` to your PostgreSQL connection string (e.g. Neon). Never commit `.env`.
+- **client**: `cp client/.env.example client/.env` — set `VITE_API_URL` to your backend API URL when frontend and API are on different origins (e.g. Vercel). Never commit `.env`.
 
 All `.env` files are gitignored. Use Vercel (or your host) Environment Variables for production; do not put real secrets in the repo.
+
+### 3. Database migration & seed (server)
+
+From the `server` directory:
+
+```bash
+npx prisma migrate dev
+npx prisma db seed
+```
+
+### 4. Start backend and frontend
+
+In two terminals:
+
+```bash
+# Terminal 1 - server
+cd server
+npm run dev
+
+# Terminal 2 - client
+cd client
+npm run dev
+```
+
+The client will typically run on `http://localhost:5173` and the API on `http://localhost:3000` (see respective configs).
 
 ---
 
 ## Vercel Build Settings
 
-**Client (frontend)** — Root: `client` | Build: `npm run build` | Output: `dist`
+**Client (frontend)** — Root: `client` • Build: `npm run build` • Output: `dist`
 
-**Server (backend)** — Root: `server` | Build: `npm run build` | Output: `dist`
+**Server (backend)** — Root: `server` • Build: `npm run build` • Output: `dist`
 
 Set `DATABASE_URL` in the server project’s environment variables. Set `VITE_API_URL` in the client project if the API is on a different domain.
 

@@ -109,58 +109,46 @@ export default function ExpensesPage() {
                     }
                 />
             ) : (
-                <div className="expenses-table-container">
-                    <div className="overflow-x-auto">
-                        <table className="expenses-table">
-                            <thead>
-                                <tr>
-                                    <th>Amount</th>
-                                    <th>Category</th>
-                                    <th>Status</th>
-                                    <th>Approval State</th>
-                                    <th>Created Date</th>
-                                    <th className="text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {sortedExpenses.map((expense) => (
-                                    <tr
-                                        key={expense.id}
-                                        className="cursor-pointer"
-                                        onClick={() => navigate(`/expenses/${expense.id}`)}
+                <div className="expenses-list">
+                    {sortedExpenses.map((expense) => (
+                        <button
+                            key={expense.id}
+                            type="button"
+                            className="expense-card"
+                            onClick={() => navigate(`/expenses/${expense.id}`)}
+                        >
+                            <div className="expense-card-main">
+                                <div className="expense-card-amount-row">
+                                    <span className="expense-amount">{expense.amountFormatted}</span>
+                                    <StatusBadge status={expense.isDraft ? 'DRAFT' : expense.status} />
+                                </div>
+                                <div className="expense-meta">
+                                    <span className="expense-category">{expense.category}</span>
+                                    <span className="expense-divider">•</span>
+                                    <span className="expense-date">{expense.createdAtLabel}</span>
+                                </div>
+                                <div className="expense-approval">
+                                    <span className="expense-approval-label">Approval</span>
+                                    <StatusBadge
+                                        status={expense.isDraft ? 'PENDING_SUBMISSION' : expense.approvalState}
+                                    />
+                                </div>
+                            </div>
+                            <div className="expense-card-actions">
+                                {expense.isDraft ? (
+                                    <button
+                                        type="button"
+                                        className="submit-pill"
+                                        onClick={(e) => handleSubmit(e, expense)}
                                     >
-                                        <td>
-                                            <span className="amount-cell">{expense.amountFormatted}</span>
-                                        </td>
-                                        <td>
-                                            <div className="category-cell">{expense.category}</div>
-                                        </td>
-                                        <td>
-                                            <StatusBadge status={expense.isDraft ? 'DRAFT' : expense.status} />
-                                        </td>
-                                        <td>
-                                            <StatusBadge status={expense.isDraft ? 'PENDING_SUBMISSION' : expense.approvalState} />
-                                        </td>
-                                        <td className="date-cell">{expense.createdAtLabel}</td>
-                                        <td className="text-right" onClick={(e) => e.stopPropagation()}>
-                                            {expense.isDraft ? (
-                                                <button
-                                                    className="submit-btn"
-                                                    onClick={(e) => handleSubmit(e, expense)}
-                                                >
-                                                    Submit
-                                                </button>
-                                            ) : (
-                                                <button className="action-btn">
-                                                    <span className="material-symbols-outlined">chevron_right</span>
-                                                </button>
-                                            )}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                                        Submit for approval
+                                    </button>
+                                ) : (
+                                    <span className="material-symbols-outlined chevron-icon">chevron_right</span>
+                                )}
+                            </div>
+                        </button>
+                    ))}
                 </div>
             )}
         </div>
